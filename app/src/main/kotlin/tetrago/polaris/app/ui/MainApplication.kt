@@ -17,15 +17,13 @@ class MainApplication : Application(), KoinComponent {
     override fun start(primaryStage: Stage?) {
         val loader = ModuleLoader(File("modules"))
 
-        val launcher = LauncherDialog(loader.modules)
+        val launcher = LauncherDialog(loader)
         launcher.showAndWait()
 
         startKoin {
             modules(module {
                 single<WindowServiceProvider> { WindowService() }
             })
-
-            modules(launcher.selectedModules.map { it.modules }.flatten())
         }
 
         val window = MainWindow(primaryStage!!)

@@ -1,7 +1,6 @@
-import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
-
 plugins {
     kotlin("jvm") version "1.8.0"
+    kotlin("plugin.serialization") version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
 
@@ -16,11 +15,15 @@ allprojects {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
         testImplementation(kotlin("test"))
         testImplementation("org.hamcrest:hamcrest:2.2")
+        testImplementation("io.mockk:mockk:1.13.5")
     }
 
     detekt {

@@ -28,4 +28,16 @@ class ModuleLoader(directory: File) {
         .filter { it.extension == "jar" }
         .mapNotNull { load(it) }
         .toList()
+
+    fun resolve(ids: List<String>): List<ModuleReference> {
+        return ids.map { id ->
+            ModuleReference(id, modules.find { it.id == id }).also {
+                if(it.provider != null) {
+                    logger.debug("Resolving module `{}` to `{}`", it.id, it.provider.name)
+                } else {
+                    logger.debug("Failed to resolve module `{}`", it.id)
+                }
+            }
+        }
+    }
 }
