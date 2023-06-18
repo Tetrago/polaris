@@ -1,4 +1,4 @@
-package tetrago.polaris
+package tetrago.polaris.core
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`

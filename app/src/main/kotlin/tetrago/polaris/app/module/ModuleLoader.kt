@@ -1,12 +1,11 @@
 package tetrago.polaris.app.module
 
-import org.koin.core.module.Module
 import org.slf4j.LoggerFactory
 import tetrago.polaris.module.ModuleProvider
 import java.io.File
 import java.net.URLClassLoader
 
-class ModuleLoader(private val directory: File) {
+class ModuleLoader(directory: File) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -25,11 +24,8 @@ class ModuleLoader(private val directory: File) {
         }
     }
 
-    fun loadAll(): List<Module> {
-        return directory.walkTopDown()
-            .filter { it.extension == "jar" }
-            .mapNotNull { load(it) }
-            .map { it.modules }
-            .toList().flatten()
-    }
+    val modules = directory.walkTopDown()
+        .filter { it.extension == "jar" }
+        .mapNotNull { load(it) }
+        .toList()
 }

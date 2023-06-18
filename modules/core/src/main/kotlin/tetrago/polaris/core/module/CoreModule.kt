@@ -9,6 +9,9 @@ import tetrago.polaris.module.ModuleProvider
 
 @PolarisModule
 class CoreModule : ModuleProvider {
+    override val id = "tetrago.polaris.core"
+    override val name = "Core"
+
     override val modules: List<Module>
         get() = listOf(
             ToolbarModule().module,

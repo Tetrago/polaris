@@ -1,16 +1,17 @@
-package tetrago.polaris.app.ui
+package tetrago.polaris.app.ui.canvas
 
 import javafx.scene.canvas.Canvas
-import javafx.scene.paint.Color
 
-class MainCanvas : Canvas() {
+class MainCanvas : Canvas(), CanvasProvider {
+    override val colors = Colors()
+
     init {
         widthProperty().addListener { _ -> repaint() }
         heightProperty().addListener { _ -> repaint() }
     }
 
-    fun repaint() = graphicsContext2D.apply {
-        fill = Color.BLUE
+    override fun repaint() = graphicsContext2D.run {
+        fill = colors.background
         fillRect(0.0, 0.0, width, height)
     }
 
