@@ -1,7 +1,9 @@
+val exposed_version: String by rootProject
 val koin_version: String by rootProject
 val koin_ksp_version: String by rootProject
 val okio_version: String by rootProject
 val slf4j_version: String by rootProject
+val sqlite_version: String by rootProject
 
 plugins {
     application
@@ -16,8 +18,12 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
-    implementation("org.slf4j:slf4j-api:$slf4j_version")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.slf4j:slf4j-api:$slf4j_version")
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.xerial:sqlite-jdbc:$sqlite_version")
 
     ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
 }
@@ -30,11 +36,12 @@ javafx {
     modules("javafx.controls", "javafx.graphics", "javafx.fxml")
 }
 
-tasks.register("launch") {
-    val task = tasks.getByPath("run")
-    dependsOn(task)
-
+tasks.register("copyModules") {
     project(":modules").subprojects.forEach {
-        task.dependsOn(it.tasks.getByPath("copyModule"))
+        dependsOn(it.tasks.named("copyModule"))
     }
+}
+
+tasks.named("run") {
+    dependsOn(tasks.named("copyModules"))
 }

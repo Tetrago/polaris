@@ -5,13 +5,12 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-object Systems : IntIdTable() {
+object Specieses : IntIdTable() {
     val name = varchar("name", 100)
 }
 
-class System(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<System>(Systems)
+class Species(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Species>(Specieses)
 
-    var name by Systems.name
-    val planets by Body referrersOn Bodies.system
+    var name by Specieses.name
 }

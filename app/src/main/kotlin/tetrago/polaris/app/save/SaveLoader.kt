@@ -1,26 +1,25 @@
 package tetrago.polaris.app.save
 
+import okio.FileSystem
+import okio.Path
 import org.slf4j.LoggerFactory
-import java.io.File
-import kotlin.math.log
+import tetrago.polaris.app.config.Properties
 
-class SaveLoader(directory: File) {
-    companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+object SaveLoader {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
-        fun parse(file: File): SaveFile? {
-            if(!File(file.parentFile, "${file.nameWithoutExtension}.db").exists()) {
-                logger.debug("Could not find database for save file `{}`", file)
-                return null
-            }
-
-            logger.debug("Found save file `{}`", file)
-            return SaveFile(file)
+    private fun parse(file: Path): SaveFile? {
+        if(!FileSystem.SYSTEM.exists(file.parent!!.resolve(file.name.replace("json", "db")))) {
+            logger.debug("Could not find database for save file `{}`", file)
+            return null
         }
+
+        logger.debug("Found save file `{}`", file)
+        return SaveFile(file)
     }
 
-    val saveFiles = directory.walkTopDown()
-        .filter { it.extension == "json" }
+    val saveFiles: List<SaveFile> get() = FileSystem.SYSTEM.list(Properties.SAVE_DIRECTORY)
+        .filter { it.name.endsWith(".json") }
         .mapNotNull { parse(it) }
         .toList()
 }

@@ -2,24 +2,18 @@ package tetrago.polaris.app.save
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import okio.buffer
-import okio.source
-import java.io.File
-import java.nio.charset.Charset
+import okio.FileSystem
+import okio.Path
 
-class SaveFile(description: File) {
+class SaveFile(description: Path) {
     val name: String
     val enabledModuleIds: List<String>
 
     init {
-        val content = description.source().buffer().readString(Charset.defaultCharset())
+        val content = FileSystem.SYSTEM.read(description) { readUtf8() }
         val desc = Json.decodeFromString<SaveDescription>(content)
 
         name = desc.name
         enabledModuleIds = desc.modules
-    }
-
-    fun load(): Save {
-        return Save()
     }
 }

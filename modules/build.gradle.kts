@@ -1,3 +1,6 @@
+val exposed_version: String by rootProject
+val koin_version: String by rootProject
+val koin_ksp_version: String by rootProject
 val slf4j_version: String by rootProject
 
 plugins {
@@ -17,9 +20,16 @@ subprojects {
         implementation(project(":app"))
         implementation(project(":annotations"))
 
+        implementation("io.insert-koin:koin-core:$koin_version")
+        implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
+        implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+        implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+        implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+        implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
         implementation("org.slf4j:slf4j-api:$slf4j_version")
 
         ksp(project(":ksp"))
+        ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
     }
 
     javafx {

@@ -1,33 +1,30 @@
 package tetrago.polaris.app.module
 
+import okio.FileSystem
+import okio.Path
 import org.slf4j.LoggerFactory
+import tetrago.polaris.app.config.Properties
 import tetrago.polaris.module.ModuleProvider
-import java.io.File
 import java.net.URLClassLoader
 
-class ModuleLoader(directory: File) {
-    companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
+object ModuleLoader {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
-        fun load(file: File): ModuleProvider? {
-            return try {
-                val loader = URLClassLoader(arrayOf(file.toURI().toURL()), ModuleLoader::class.java.classLoader)
-                val module = Class.forName("tetrago.polaris.ksp.generated.Module", true, loader)
-                val method = module.getDeclaredMethod("get")
+    val moduleMap = FileSystem.SYSTEM.list(Properties.MODULE_DIRECTORY)
+        .filter { it.name.endsWith(".jar") }
+        .mapNotNull { load(it) }
+        .toMap()
 
+    val modules get() = moduleMap.keys
+
+    private fun load(file: Path): Pair<ModuleProvider, ModuleClassLoader>? {
+        return ModuleClassLoader(file, javaClass.classLoader).let { loader ->
+            loader.moduleProvider?.let {
                 logger.info("Found module in file `{}`", file)
-                method.invoke(null) as ModuleProvider
-            } catch(e: ClassNotFoundException) {
-                logger.info("Found no module in file `{}`", file)
-                null
+                it to loader
             }
         }
     }
-
-    val modules = directory.walkTopDown()
-        .filter { it.extension == "jar" }
-        .mapNotNull { load(it) }
-        .toList()
 
     fun resolve(ids: List<String>): List<ModuleReference> {
         return ids.map { id ->
@@ -39,5 +36,30 @@ class ModuleLoader(directory: File) {
                 }
             }
         }
+    }
+
+    fun orderModules(list: List<ModuleProvider>): List<ModuleProvider> {
+        val stack = mutableListOf<ModuleProvider>()
+        val orders = list.toMutableList()
+
+        while(orders.isNotEmpty()) {
+            orders.removeAll { order ->
+                val unresolved = order.dependencies.toMutableList().apply {
+                    removeAll { dependency -> stack.any { it.id == dependency } }
+                }
+
+                if(unresolved.isEmpty()) {
+                    stack.add(order)
+                }
+
+                unresolved.isEmpty()
+            }
+        }
+
+        return stack
+    }
+
+    inline fun <reified T : ModuleProvider> get(): ModuleProvider? {
+        return moduleMap.mapNotNull { (key, _) -> if(key is T) key else null }.singleOrNull()
     }
 }
