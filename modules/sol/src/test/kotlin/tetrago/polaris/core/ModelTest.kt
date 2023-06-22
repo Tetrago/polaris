@@ -14,7 +14,7 @@ import tetrago.polaris.core.model.Body
 import tetrago.polaris.core.model.Bodies
 import tetrago.polaris.core.model.System
 import tetrago.polaris.core.model.Systems
-import tetrago.polaris.core.model.toDistance
+import tetrago.polaris.core.model.toDst
 import java.io.File
 import java.sql.Connection
 
@@ -43,7 +43,7 @@ class ModelTest {
             val sun = Body.new {
                 system = sol
                 name = "Sun"
-                radius = 696340.toDistance()
+                radius = 696340.toDst()
             }
 
             logger.info("Creating child planet...")
@@ -51,7 +51,7 @@ class ModelTest {
                 system = sol
                 parent = sun
                 name = "Mercury"
-                radius = 2440.toDistance()
+                radius = 2440.toDst()
             }
         }
 

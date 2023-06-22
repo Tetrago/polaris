@@ -10,6 +10,7 @@ object Bodies : IntIdTable() {
     val parent = reference("parent", Bodies).nullable()
     val name = varchar("name", 100)
     val radius = long("radius")
+    val orbit = text("orbit")
 }
 
 class Body(id: EntityID<Int>) : IntEntity(id) {
@@ -18,5 +19,6 @@ class Body(id: EntityID<Int>) : IntEntity(id) {
     var system by System referencedOn Bodies.system
     var parent by Body optionalReferencedOn Bodies.parent
     var name by Bodies.name
-    var radius: Distance by Bodies.radius.transform({ it.kilometers }, { it.toDistance() })
+    var radius: Distance by Bodies.radius.byDistance()
+    var orbit: Orbit by Bodies.orbit.byOrbit()
 }
