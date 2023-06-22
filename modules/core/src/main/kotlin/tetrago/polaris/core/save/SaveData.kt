@@ -8,7 +8,7 @@ import tetrago.polaris.app.ui.Loader
 import tetrago.polaris.core.CoreModule
 import tetrago.polaris.core.model.Bodies
 import tetrago.polaris.core.model.Species
-import tetrago.polaris.core.model.Specieses
+import tetrago.polaris.core.model.SpeciesTable
 import tetrago.polaris.core.model.Systems
 import tetrago.polaris.core.ui.controller.NewSavePaneController
 
@@ -23,7 +23,7 @@ class SaveData : SaveDataProvider {
     }
 
     override fun initialize() {
-        SchemaUtils.create(Bodies, Specieses, Systems)
+        SchemaUtils.create(Bodies, SpeciesTable, Systems)
 
         Species.new {
             name = controller.speciesName.text

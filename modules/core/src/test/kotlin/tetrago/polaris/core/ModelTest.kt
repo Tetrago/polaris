@@ -14,7 +14,7 @@ import tetrago.polaris.core.model.Body
 import tetrago.polaris.core.model.Bodies
 import tetrago.polaris.core.model.System
 import tetrago.polaris.core.model.Systems
-import tetrago.polaris.core.model.toDst
+import tetrago.polaris.core.model.unit.toDst
 import java.io.File
 import java.sql.Connection
 

@@ -42,7 +42,7 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
 
                 try {
                     writeSaveData()
-                } catch(e: IllegalStateException) {
+                } catch(_: IllegalStateException) {
                     FileSystem.SYSTEM.delete("saves/$uuid.json".toPath())
                     FileSystem.SYSTEM.delete("saves/$uuid.db".toPath())
                 }

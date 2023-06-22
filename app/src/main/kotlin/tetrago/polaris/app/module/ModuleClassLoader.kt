@@ -35,11 +35,11 @@ class ModuleClassLoader(
         try {
             return super.loadClass(name)
         } catch(e: ClassNotFoundException) {
-            if(name != CLASSPATH) {
-                ModuleLoader.moduleMap.forEach { (module, loader) ->
-                    if(name?.startsWith(module.id) == true) {
-                        return loader.shallowLoadClass(name)
-                    }
+            if(name == CLASSPATH) throw e
+
+            ModuleLoader.moduleMap.forEach { (module, loader) ->
+                if(name?.startsWith(module.id) == true) {
+                    return loader.shallowLoadClass(name)
                 }
             }
 

@@ -21,7 +21,10 @@ class MainApplication : Application(), KoinComponent {
                 single<WindowServiceProvider> { WindowService() }
             })
 
-            modules(ModuleLoader.modules.filter { result.enabledModuleIds.contains(it.id) }.map { it.modules }.flatten())
+            modules(ModuleLoader.modules
+                .filter { result.enabledModuleIds.contains(it.id) }
+                .map { it.modules }
+                .flatten())
         }
 
         val window = MainWindow(primaryStage!!)

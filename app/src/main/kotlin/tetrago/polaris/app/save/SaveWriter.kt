@@ -60,8 +60,8 @@ class SaveWriter(
                                 }
                             }.showAndWait()
 
-                            if(result.isEmpty || result.get() == ButtonType.CANCEL) {
-                                throw IllegalStateException("Save creation aborted")
+                            check(result.isPresent && result.get() != ButtonType.CANCEL) {
+                                "Save creation aborted"
                             }
                         }
 

@@ -1,4 +1,4 @@
-package tetrago.polaris.core.model
+package tetrago.polaris.core.model.unit
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -9,6 +9,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.jetbrains.exposed.dao.ColumnWithTransform
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 import tetrago.polaris.core.model.Body.Companion.transform
 import kotlin.math.PI
 
@@ -30,6 +31,8 @@ fun Number.toRot(unit: RotationUnit = RotationUnit.RADIANS): Rotation {
         RotationUnit.RADIANS -> Rotation(toDouble())
     }
 }
+
+fun Table.rotation(name: String): Column<Double> = double(name)
 
 fun Column<Double>.byRotation(): ColumnWithTransform<Double, Rotation> {
     return transform({ it.radians }, { it.toRot() })

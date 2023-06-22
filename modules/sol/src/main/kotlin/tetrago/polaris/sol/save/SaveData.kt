@@ -2,7 +2,11 @@ package tetrago.polaris.sol.save
 
 import javafx.scene.layout.Pane
 import tetrago.polaris.app.save.SaveDataProvider
-import tetrago.polaris.core.model.*
+import tetrago.polaris.core.model.Body
+import tetrago.polaris.core.model.Orbit
+import tetrago.polaris.core.model.System
+import tetrago.polaris.core.model.unit.toDst
+import tetrago.polaris.core.model.unit.toRot
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.random.Random

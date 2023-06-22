@@ -67,6 +67,6 @@ object ModuleLoader {
     }
 
     inline fun <reified T : ModuleProvider> get(): ModuleProvider? {
-        return moduleMap.mapNotNull { (key, _) -> if(key is T) key else null }.singleOrNull()
+        return moduleMap.mapNotNull { (key, _) -> key as? T }.singleOrNull()
     }
 }
