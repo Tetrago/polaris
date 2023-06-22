@@ -2,15 +2,15 @@ package tetrago.polaris.app.module
 
 import okio.FileSystem
 import okio.Path
+import okio.Path.Companion.toPath
 import org.slf4j.LoggerFactory
-import tetrago.polaris.app.config.Properties
+import tetrago.polaris.app.config.Configuration
 import tetrago.polaris.module.ModuleProvider
-import java.net.URLClassLoader
 
 object ModuleLoader {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    val moduleMap = FileSystem.SYSTEM.list(Properties.MODULE_DIRECTORY)
+    val moduleMap = FileSystem.SYSTEM.list(Configuration.moduleDirectory.toPath())
         .filter { it.name.endsWith(".jar") }
         .mapNotNull { load(it) }
         .toMap()
@@ -43,6 +43,8 @@ object ModuleLoader {
         val orders = list.toMutableList()
 
         while(orders.isNotEmpty()) {
+            val swap = stack.toList()
+
             orders.removeAll { order ->
                 val unresolved = order.dependencies.toMutableList().apply {
                     removeAll { dependency -> stack.any { it.id == dependency } }
@@ -53,6 +55,11 @@ object ModuleLoader {
                 }
 
                 unresolved.isEmpty()
+            }
+
+            if(swap == stack) {
+                logger.error("Circular dependency between modules detected:")
+                swap.forEach { logger.error("\t${it.id}") }
             }
         }
 

@@ -1,4 +1,5 @@
 val exposed_version: String by rootProject
+val hoplite_version: String by rootProject
 val koin_version: String by rootProject
 val koin_ksp_version: String by rootProject
 val okio_version: String by rootProject
@@ -14,6 +15,8 @@ plugins {
 dependencies {
     implementation(project(":annotations"))
 
+    implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
+    implementation("com.sksamuel.hoplite:hoplite-toml:$hoplite_version")
     implementation("com.squareup.okio:okio:$okio_version")
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
