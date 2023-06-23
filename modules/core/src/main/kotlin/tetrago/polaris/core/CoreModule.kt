@@ -7,10 +7,10 @@ import tetrago.polaris.app.save.SaveDataProvider
 import tetrago.polaris.core.save.SaveData
 import tetrago.polaris.core.ui.toolbar.ToolbarModule
 import tetrago.polaris.core.ui.window.WindowModule
-import tetrago.polaris.module.PolarisModule
 import tetrago.polaris.module.ModuleProvider
+import tetrago.polaris.module.Polaris
 
-@PolarisModule
+@Polaris
 class CoreModule : ModuleProvider {
     override val id = "tetrago.polaris.core"
     override val name = "Core"

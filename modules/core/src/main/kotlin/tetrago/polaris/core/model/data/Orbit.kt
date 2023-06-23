@@ -1,4 +1,4 @@
-package tetrago.polaris.core.model
+package tetrago.polaris.core.model.data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString

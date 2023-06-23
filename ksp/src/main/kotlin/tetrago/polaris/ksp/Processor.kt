@@ -1,68 +1,36 @@
 package tetrago.polaris.ksp
 
-import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.TypeSpec
-import com.squareup.kotlinpoet.ksp.writeTo
-import tetrago.polaris.module.ModuleProvider
-import tetrago.polaris.module.PolarisModule
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.*
+import com.google.devtools.ksp.validate
+import tetrago.polaris.module.Polaris
+import tetrago.polaris.module.Registry
+import kotlin.reflect.KClass
 
-class Processor(private val codeGenerator: CodeGenerator) : SymbolProcessor {
-    private fun findModuleClass(resolver: Resolver): KSClassDeclaration? {
-        val list = resolver.getSymbolsWithAnnotation(PolarisModule::class.qualifiedName!!)
+class Processor(
+    private val logger: KSPLogger,
+    private val codeGenerator: CodeGenerator
+) : SymbolProcessor {
+    private fun visitAnnotated(resolver: Resolver, annotation: KClass<*>, visitor: KSVisitorVoid): List<KSAnnotated> {
+        val map = resolver.getSymbolsWithAnnotation(annotation.qualifiedName!!).associateWith { it.validate() }
+
+        map.filter { it.value }.keys
             .filterIsInstance<KSClassDeclaration>()
+            .forEach { it.accept(visitor, Unit) }
 
-        return list.singleOrNull()?.run {
-            if(superTypes.any {
-                    it.resolve().declaration.qualifiedName?.asString() == ModuleProvider::class.qualifiedName!! }) {
-                this
-            } else {
-                null
-            }
-        }
-    }
-
-    private fun buildFile(target: KSClassDeclaration): FileSpec {
-        val packageName = "tetrago.polaris.ksp.generated"
-        val className = "Module"
-
-        return FileSpec.builder(packageName, className)
-            .addImport(target.packageName.asString(), target.simpleName.asString())
-            .addType(TypeSpec.classBuilder(ClassName(packageName, className))
-                .addType(TypeSpec.companionObjectBuilder()
-                    .addFunction(FunSpec.builder("get")
-                        .addAnnotation(JvmStatic::class)
-                        .returns(ModuleProvider::class)
-                        .addStatement("return ${target.simpleName.asString()}()")
-                        .build())
-                    .build())
-                .build())
-            .build()
+        return map.filterNot { it.value }.keys.toList()
     }
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        println("Processing")
-
-        findModuleClass(resolver)?.let {
-            println("Resolving class `${it.qualifiedName!!.asString()}`")
-            buildFile(it).writeTo(codeGenerator, Dependencies(false, it.containingFile!!))
-        }
-
-        return emptyList()
+        return listOf(
+            visitAnnotated(resolver, Registry::class, RegistryVisitor(logger, codeGenerator)),
+            visitAnnotated(resolver, Polaris::class, ModuleVisitor(logger, codeGenerator))
+        ).flatten()
     }
 }
 
 class ProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return Processor(environment.codeGenerator)
+        return Processor(environment.logger, environment.codeGenerator)
     }
 }

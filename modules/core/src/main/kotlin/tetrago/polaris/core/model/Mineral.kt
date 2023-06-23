@@ -14,3 +14,9 @@ class Mineral(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Minerals.name
 }
+
+fun Mineral(name: String): Mineral {
+    return Mineral.new {
+        this.name = name
+    }
+}

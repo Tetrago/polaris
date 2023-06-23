@@ -15,3 +15,18 @@ class System(id: EntityID<Int>) : IntEntity(id) {
     var name by Systems.name
     val planets by Body referrersOn Bodies.system
 }
+
+fun System(name: String, block: System.() -> Unit): System {
+    return System.new {
+        this.name = name
+        block()
+    }
+}
+
+fun System.Body(name: String, block: Body.() -> Unit): Body {
+    return Body.new {
+        system = this@Body
+        this.name = name
+        block()
+    }
+}

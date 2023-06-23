@@ -3,18 +3,13 @@ package tetrago.polaris.app.ui
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.Scene
-import javafx.scene.control.Button
-import javafx.scene.control.Tooltip
 import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 import javafx.stage.Stage
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import tetrago.polaris.app.ui.canvas.MainCanvas
 import tetrago.polaris.app.ui.controller.MainController
 import tetrago.polaris.app.ui.toolbar.ToolbarProvider
-import tetrago.polaris.app.ui.window.WindowServiceProvider
 
 class MainWindow(stage: Stage) : KoinComponent {
     companion object {
@@ -29,6 +24,7 @@ class MainWindow(stage: Stage) : KoinComponent {
     init {
         stage.title = "Polaris"
         stage.onCloseRequest = EventHandler { Platform.exit() }
+        stage.icons.add(MainApplication.icon)
 
         Loader.loadFxml<MainController>("main.fxml").also {
             stage.scene = Scene(it.first, 1280.0, 720.0)

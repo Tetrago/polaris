@@ -19,6 +19,7 @@ abstract class ResultDialog<T, R>(title: String, path: String, module: ModulePro
     init {
         this.title = title
         onCloseRequest = EventHandler { close() }
+        icons.add(MainApplication.icon)
 
         Loader.loadFxml<T>(path, module).also {
             scene = Scene(it.first)

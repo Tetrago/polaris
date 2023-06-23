@@ -6,10 +6,18 @@ import tetrago.polaris.app.module.ModuleLoader
 import tetrago.polaris.app.save.SaveDataProvider
 import tetrago.polaris.app.ui.Loader
 import tetrago.polaris.core.CoreModule
+import tetrago.polaris.core.model.Atmospheres
 import tetrago.polaris.core.model.Bodies
+import tetrago.polaris.core.model.BodyTypes
+import tetrago.polaris.core.model.Deposits
+import tetrago.polaris.core.model.Gases
+import tetrago.polaris.core.model.Minerals
 import tetrago.polaris.core.model.Species
 import tetrago.polaris.core.model.SpeciesTable
 import tetrago.polaris.core.model.Systems
+import tetrago.polaris.core.model.registry.BodyTypeRegistry
+import tetrago.polaris.core.model.registry.GasRegistry
+import tetrago.polaris.core.model.registry.MineralRegistry
 import tetrago.polaris.core.ui.controller.NewSavePaneController
 
 class SaveData : SaveDataProvider {
@@ -23,7 +31,20 @@ class SaveData : SaveDataProvider {
     }
 
     override fun initialize() {
-        SchemaUtils.create(Bodies, SpeciesTable, Systems)
+        SchemaUtils.create(
+            Atmospheres,
+            Bodies,
+            BodyTypes,
+            Deposits,
+            Gases,
+            Minerals,
+            SpeciesTable,
+            Systems
+        )
+
+        BodyTypeRegistry
+        GasRegistry
+        MineralRegistry
 
         Species.new {
             name = controller.speciesName.text
