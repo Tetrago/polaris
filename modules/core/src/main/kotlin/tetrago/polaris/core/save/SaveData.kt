@@ -19,6 +19,7 @@ import tetrago.polaris.core.model.registry.BodyTypeRegistry
 import tetrago.polaris.core.model.registry.GasRegistry
 import tetrago.polaris.core.model.registry.MineralRegistry
 import tetrago.polaris.core.ui.controller.NewSavePaneController
+import kotlin.random.Random
 
 class SaveData : SaveDataProvider {
     private lateinit var controller: NewSavePaneController
@@ -30,7 +31,7 @@ class SaveData : SaveDataProvider {
         }
     }
 
-    override fun initialize() {
+    override fun initialize(random: Random) {
         SchemaUtils.create(
             Atmospheres,
             Bodies,

@@ -16,6 +16,7 @@ import tetrago.polaris.module.ModuleProvider
 import java.sql.Connection
 import java.util.UUID
 import kotlin.IllegalStateException
+import kotlin.random.Random
 
 class SaveWriter(
     private val directory: Path,
@@ -39,8 +40,7 @@ class SaveWriter(
         logger.info("Wrote save description for save `{}`", name)
     }
 
-    @Throws(IllegalStateException::class)
-    fun writeSaveData() {
+    fun writeSaveData(seed: Int) {
         val path = directory.resolve("$uuid.db")
         val database = Database.connect("jdbc:sqlite:${path}", "org.sqlite.JDBC")
         database.transactionManager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
@@ -65,7 +65,7 @@ class SaveWriter(
                             }
                         }
 
-                        it.initialize()
+                        it.initialize(Random(seed))
                     }
                 }
             }

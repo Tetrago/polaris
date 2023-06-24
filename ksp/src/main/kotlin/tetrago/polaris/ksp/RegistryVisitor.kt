@@ -54,7 +54,8 @@ class RegistryVisitor(
             logger.info("Writing holder property `${property.simpleName.asString()}`")
             holder.addProperty(
                 PropertySpec.builder(property.simpleName.asString(), property.type.toTypeName())
-                    .initializer("%T.find { %T.name eq %S }.single()", property.type.toTypeName(), entityType.toTypeName(), value)
+                    .initializer("%T.find { %T.name eq %S }.single()",
+                        property.type.toTypeName(), entityType.toTypeName(), value)
                     .build())
         }
 

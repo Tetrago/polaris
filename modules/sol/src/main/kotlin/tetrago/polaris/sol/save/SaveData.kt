@@ -14,7 +14,7 @@ import kotlin.random.Random
 class SaveData : SaveDataProvider {
     override fun loadConfig(): Pane? = null
 
-    override fun initialize() {
+    override fun initialize(random: Random) {
         System("Sol") {
             Body("Sun") {
                 radius = 696340.toDst()

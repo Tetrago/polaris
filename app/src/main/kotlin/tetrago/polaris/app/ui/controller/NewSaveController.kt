@@ -16,5 +16,8 @@ class NewSaveController {
     lateinit var nameField: TextField
 
     @FXML
+    lateinit var seedField: TextField
+
+    @FXML
     lateinit var modulesList: ListView<String>
 }
