@@ -5,7 +5,6 @@ val koin_ksp_version: String by rootProject
 val kotlin_faker_version: String by rootProject
 val okio_version: String by rootProject
 val slf4j_version: String by rootProject
-val valiktor_version: String by rootProject
 
 plugins {
     application

@@ -13,14 +13,7 @@ class System(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<System>(Systems)
 
     var name by Systems.name
-    val planets by Body referrersOn Bodies.system
-}
-
-fun System(name: String, block: System.() -> Unit): System {
-    return System.new {
-        this.name = name
-        block()
-    }
+    val bodies by Body referrersOn Bodies.system
 }
 
 fun System.Body(name: String, block: Body.() -> Unit): Body {

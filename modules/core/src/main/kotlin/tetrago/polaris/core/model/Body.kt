@@ -28,7 +28,7 @@ class Body(id: EntityID<Int>) : IntEntity(id) {
     var name by Bodies.name
     var radius: Distance by Bodies.radius.byDistance()
     var orbit: Orbit by Bodies.orbit.byOrbit()
-    var type by BodyType referencedOn BodyTypes.id
+    var type by BodyType referencedOn Bodies.type
     val deposits by Deposit referrersOn Deposits.body
     val atmospheres by Atmosphere referrersOn Atmospheres.body
 }

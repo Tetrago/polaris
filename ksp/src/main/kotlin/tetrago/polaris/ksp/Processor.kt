@@ -30,8 +30,8 @@ class Processor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         return listOf(
-            visitAnnotated(resolver, Registry::class, RegistryVisitor(logger, codeGenerator)),
-            visitAnnotated(resolver, Polaris::class, ModuleVisitor(logger, codeGenerator))
+            visitAnnotated(resolver, Polaris::class, ModuleVisitor(logger, codeGenerator)),
+            visitAnnotated(resolver, Registry::class, RegistryVisitor(logger, codeGenerator))
         ).flatten()
     }
 }

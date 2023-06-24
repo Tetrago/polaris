@@ -6,6 +6,7 @@ import javafx.event.EventHandler
 import javafx.scene.control.cell.CheckBoxListCell
 import okio.FileSystem
 import okio.Path.Companion.toPath
+import org.slf4j.LoggerFactory
 import tetrago.polaris.app.module.ModuleLoader
 import tetrago.polaris.app.save.SaveWriter
 import tetrago.polaris.app.ui.controller.NewSaveController
@@ -38,12 +39,12 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
         controller.continueButton.setOnAction {
             val modules = ModuleLoader.modules.zip(moduleBoxes).filter { it.second.get() }.map { it.first }
 
-            SaveWriter("saves".toPath(), controller.nameField.text, modules).apply {
+            SaveWriter(controller.nameField.text, modules).apply {
                 writeSaveDescription()
 
                 try {
                     writeSaveData(controller.seedField.text.toInt())
-                } catch(_: IllegalStateException) {
+                } catch(_: SaveWriter.AbortException) {
                     FileSystem.SYSTEM.delete("saves/$uuid.json".toPath())
                     FileSystem.SYSTEM.delete("saves/$uuid.db".toPath())
                 }

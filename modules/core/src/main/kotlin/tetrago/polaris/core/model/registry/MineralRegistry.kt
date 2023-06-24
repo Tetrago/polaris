@@ -8,8 +8,13 @@ import tetrago.polaris.module.Registry
 @Registry(Minerals::class)
 object MineralRegistry {
     @Holder
-    val Titanium = Mineral("Titanium")
+    lateinit var Titanium: Mineral
 
     @Holder
-    val Aluminum = Mineral("Aluminum")
+    lateinit var Aluminum: Mineral
+
+    fun create() {
+        Titanium = Mineral("Titanium")
+        Aluminum = Mineral("Aluminum")
+    }
 }

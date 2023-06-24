@@ -1,24 +1,28 @@
 package tetrago.polaris.sol.save
 
 import javafx.scene.layout.Pane
-import tetrago.polaris.app.save.SaveDataProvider
+import tetrago.polaris.app.save.SaveDataWriter
 import tetrago.polaris.core.model.Body
 import tetrago.polaris.core.model.data.Orbit
 import tetrago.polaris.core.model.System
+import tetrago.polaris.core.model.registry.BodyTypeHolder
 import tetrago.polaris.core.model.unit.toDst
 import tetrago.polaris.core.model.unit.toRot
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.random.Random
 
-class SaveData : SaveDataProvider {
+class Writer : SaveDataWriter {
     override fun loadConfig(): Pane? = null
 
     override fun initialize(random: Random) {
-        System("Sol") {
+        System.new {
+            name = "Sol"
+        }.apply {
             Body("Sun") {
                 radius = 696340.toDst()
                 orbit = Orbit(0.toDst(), 0.toDst(), 0.toRot(), 0.toRot())
+                type = BodyTypeHolder.Star
             }.apply {
                 terrestrials()
                 gasGiants()
@@ -36,6 +40,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.Terrestrial
         }
 
         Body("Venus") {
@@ -46,6 +51,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.Terrestrial
         }
 
         Body("Earth") {
@@ -56,9 +62,11 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.Terrestrial
         }.Body("Moon") {
             radius = 1737.toDst()
             orbit = Orbit(404920.toDst(), 367966.toDst(), 0.toRot(), 0.toRot())
+            type = BodyTypeHolder.Terrestrial
         }
 
         Body("Mars") {
@@ -69,6 +77,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.Terrestrial
         }
     }
 
@@ -81,6 +90,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.GasGiant
         }
 
         Body("Saturn") {
@@ -91,6 +101,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.GasGiant
         }
     }
 
@@ -103,6 +114,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.IceGiant
         }
 
         Body("Neptune") {
@@ -113,6 +125,7 @@ class SaveData : SaveDataProvider {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
+            type = BodyTypeHolder.IceGiant
         }
     }
 }

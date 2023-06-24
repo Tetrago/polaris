@@ -16,10 +16,10 @@ object SaveLoader {
         }
 
         logger.debug("Found save file `{}`", file)
-        return SaveFile(file)
+        return SaveFile(file.name.removeSuffix(".json"))
     }
 
-    val saveFiles: List<SaveFile> get() = FileSystem.SYSTEM.list(Configuration.saveDirectory.toPath())
+    val saveFiles: List<SaveFile> get() = FileSystem.SYSTEM.list(Configuration.savesPath)
         .filter { it.name.endsWith(".json") }
         .mapNotNull { parse(it) }
         .toList()

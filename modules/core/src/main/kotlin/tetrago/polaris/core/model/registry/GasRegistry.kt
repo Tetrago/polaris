@@ -8,17 +8,25 @@ import tetrago.polaris.module.Registry
 @Registry(Gases::class)
 object GasRegistry {
     @Holder
-    val Nitrogen = Gas("Nitrogen", "N2")
+    lateinit var Nitrogen: Gas
 
     @Holder
-    val Oxygen = Gas("Oxygen", "O2")
+    lateinit var Oxygen: Gas
 
     @Holder("Water Vapor")
-    val WaterVapor = Gas("Water Vapor", "H2O")
+    lateinit var WaterVapor: Gas
 
     @Holder("Carbon Dioxide")
-    val CarbonDioxide = Gas("Carbon Dioxide", "CO2")
+    lateinit var CarbonDioxide: Gas
 
     @Holder
-    val Argon = Gas("Argon", "Ar2")
+    lateinit var Argon: Gas
+
+    fun create() {
+        Nitrogen = Gas("Nitrogen", "N2")
+        Oxygen = Gas("Oxygen", "O2")
+        WaterVapor = Gas("Water Vapor", "H2O")
+        CarbonDioxide = Gas("Carbon Dioxide", "CO2")
+        Argon = Gas("Argon", "Ar2")
+    }
 }

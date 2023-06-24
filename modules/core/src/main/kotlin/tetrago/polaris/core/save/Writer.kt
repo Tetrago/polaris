@@ -1,9 +1,11 @@
 package tetrago.polaris.core.save
 
+import io.github.serpro69.kfaker.Faker
 import javafx.scene.layout.Pane
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.koin.core.annotation.Single
 import tetrago.polaris.app.module.ModuleLoader
-import tetrago.polaris.app.save.SaveDataProvider
+import tetrago.polaris.app.save.SaveDataWriter
 import tetrago.polaris.app.ui.Loader
 import tetrago.polaris.core.CoreModule
 import tetrago.polaris.core.model.Atmospheres
@@ -21,12 +23,16 @@ import tetrago.polaris.core.model.registry.MineralRegistry
 import tetrago.polaris.core.ui.controller.NewSavePaneController
 import kotlin.random.Random
 
-class SaveData : SaveDataProvider {
+@Single
+class Writer : SaveDataWriter {
     private lateinit var controller: NewSavePaneController
 
     override fun loadConfig(): Pane? {
         return Loader.loadFxml<NewSavePaneController>("new_save_pane.fxml", ModuleLoader.get<CoreModule>()).let {
             controller = it.second
+
+            controller.speciesName.text = Faker().ancient.titan()
+
             it.first
         }
     }
@@ -43,9 +49,9 @@ class SaveData : SaveDataProvider {
             Systems
         )
 
-        BodyTypeRegistry
-        GasRegistry
-        MineralRegistry
+        BodyTypeRegistry.create()
+        GasRegistry.create()
+        MineralRegistry.create()
 
         Species.new {
             name = controller.speciesName.text

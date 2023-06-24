@@ -1,8 +1,12 @@
 package tetrago.polaris.app.ui.canvas
 
 import javafx.scene.canvas.Canvas
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class MainCanvas : Canvas(), CanvasProvider {
+class MainCanvas : Canvas(), CanvasProvider, KoinComponent {
+    private val painters: List<CanvasPainter> by inject()
+
     override val colors = Colors()
 
     init {
@@ -13,6 +17,8 @@ class MainCanvas : Canvas(), CanvasProvider {
     override fun repaint() = graphicsContext2D.run {
         fill = colors.background
         fillRect(0.0, 0.0, width, height)
+
+        painters.forEach { it.paint(width, height, this) }
     }
 
     override fun isResizable(): Boolean = true

@@ -3,8 +3,9 @@ package tetrago.polaris.core
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
-import tetrago.polaris.app.save.SaveDataProvider
-import tetrago.polaris.core.save.SaveData
+import tetrago.polaris.app.ui.canvas.CanvasPainter
+import tetrago.polaris.core.save.SaveModule
+import tetrago.polaris.core.ui.SystemView
 import tetrago.polaris.core.ui.toolbar.ToolbarModule
 import tetrago.polaris.core.ui.window.WindowModule
 import tetrago.polaris.module.ModuleProvider
@@ -21,8 +22,9 @@ class CoreModule : ModuleProvider {
         get() = listOf(
             ToolbarModule().module,
             WindowModule().module,
+            SaveModule().module,
             module {
-                single<SaveDataProvider> { SaveData() }
+                single<CanvasPainter> { SystemView() }
             }
         )
 }

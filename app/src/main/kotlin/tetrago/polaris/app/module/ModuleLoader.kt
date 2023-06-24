@@ -10,7 +10,7 @@ import tetrago.polaris.module.ModuleProvider
 object ModuleLoader {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    val moduleMap = FileSystem.SYSTEM.list(Configuration.moduleDirectory.toPath())
+    val moduleMap = FileSystem.SYSTEM.list(Configuration.modulesPath)
         .filter { it.name.endsWith(".jar") }
         .mapNotNull { load(it) }
         .toMap()

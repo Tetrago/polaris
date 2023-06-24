@@ -8,14 +8,25 @@ import tetrago.polaris.module.Registry
 @Registry(BodyTypes::class)
 object BodyTypeRegistry {
     @Holder
-    val Terrestrial = BodyType("Terrestrial", true, true)
+    lateinit var Star: BodyType
 
     @Holder
-    val GasGiant = BodyType("Gas Giant", false, false)
+    lateinit var Terrestrial: BodyType
+
+    @Holder("Gas Giant")
+    lateinit var GasGiant: BodyType
+
+    @Holder("Ice Giant")
+    lateinit var IceGiant: BodyType
 
     @Holder
-    val IceGiant = BodyType("Ice Giant", false, false)
+    lateinit var Asteroid: BodyType
 
-    @Holder
-    val Asteroid = BodyType("Asteroid", true, false)
+    fun create() {
+        Star = BodyType("Star", solid = false, colonizable = false)
+        Terrestrial = BodyType("Terrestrial", solid = true, colonizable = true)
+        GasGiant = BodyType("Gas Giant", solid = false, colonizable = false)
+        IceGiant = BodyType("Ice Giant", solid = false, colonizable = false)
+        Asteroid = BodyType("Asteroid", solid = true, colonizable = false)
+    }
 }

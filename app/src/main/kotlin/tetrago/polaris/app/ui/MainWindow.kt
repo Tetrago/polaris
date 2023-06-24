@@ -6,6 +6,7 @@ import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import tetrago.polaris.app.ui.canvas.MainCanvas
 import tetrago.polaris.app.ui.controller.MainController
@@ -18,7 +19,7 @@ class MainWindow(stage: Stage) : KoinComponent {
 
     val canvas: MainCanvas
 
-    private val toolbars: List<ToolbarProvider> = getKoin().getAll()
+    private val toolbars: List<ToolbarProvider> by inject()
     private val controller: MainController
 
     init {

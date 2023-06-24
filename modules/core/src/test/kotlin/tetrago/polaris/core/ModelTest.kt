@@ -63,9 +63,9 @@ class ModelTest {
             assertThat(System.count(), `is`(1))
             System.all().single().also { system ->
                 assertThat(system.name, `is`("Sol"))
-                assertThat(system.planets.count(), `is`(2))
+                assertThat(system.bodies.count(), `is`(2))
 
-                val it = system.planets.iterator()
+                val it = system.bodies.iterator()
 
                 val sol = it.next().also {
                     assertThat(it.parent, nullValue())

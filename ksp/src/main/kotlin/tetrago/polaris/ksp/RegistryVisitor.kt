@@ -10,6 +10,7 @@ import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.toTypeName
@@ -54,8 +55,10 @@ class RegistryVisitor(
             logger.info("Writing holder property `${property.simpleName.asString()}`")
             holder.addProperty(
                 PropertySpec.builder(property.simpleName.asString(), property.type.toTypeName())
-                    .initializer("%T.find { %T.name eq %S }.single()",
-                        property.type.toTypeName(), entityType.toTypeName(), value)
+                    .getter(FunSpec.getterBuilder()
+                        .addCode("return %T.find { %T.name eq %S }.single()",
+                            property.type.toTypeName(), entityType.toTypeName(), value)
+                        .build())
                     .build())
         }
 
