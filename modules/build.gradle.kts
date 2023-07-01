@@ -42,3 +42,9 @@ subprojects {
         dependsOn("assemble")
     }
 }
+
+tasks.named("clean").also { clean ->
+    subprojects.forEach {
+        clean.get().dependsOn(it.tasks.named("clean"))
+    }
+}

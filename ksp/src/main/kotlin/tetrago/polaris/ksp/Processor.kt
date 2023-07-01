@@ -32,7 +32,7 @@ class Processor(
         return listOf(
             visitAnnotated(resolver, Polaris::class, ModuleVisitor(logger, codeGenerator)),
             visitAnnotated(resolver, Registry::class, RegistryVisitor(logger, codeGenerator))
-        ).flatten()
+        ).distinct().flatten()
     }
 }
 

@@ -27,7 +27,7 @@ import kotlin.random.Random
 class Writer : SaveDataWriter {
     private lateinit var controller: NewSavePaneController
 
-    override fun loadConfig(): Pane? {
+    override fun loadConfig(): Pane {
         return Loader.loadFxml<NewSavePaneController>("new_save_pane.fxml", ModuleLoader.get<CoreModule>()).let {
             controller = it.second
 

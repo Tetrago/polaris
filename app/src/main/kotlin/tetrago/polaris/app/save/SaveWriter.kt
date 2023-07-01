@@ -48,8 +48,8 @@ class SaveWriter(
         val database = Database.connect("jdbc:sqlite:${path}", "org.sqlite.JDBC")
         database.transactionManager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
-        koinApplication {
-            ModuleLoader.orderModules(modules).forEach { module ->
+        ModuleLoader.orderModules(modules).forEach { module ->
+            koinApplication {
                 transaction(database) {
                     modules(module.modules)
 

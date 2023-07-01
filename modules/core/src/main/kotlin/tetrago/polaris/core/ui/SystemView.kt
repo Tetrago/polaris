@@ -9,18 +9,18 @@ import tetrago.polaris.app.ui.canvas.CanvasProvider
 import tetrago.polaris.core.model.System
 
 class SystemView : CanvasPainter, KoinComponent {
-    private val canvas: CanvasProvider by inject()
+    private val canvasProvider: CanvasProvider by inject()
 
     var system: System? = null
         set(value) {
             field = value
-            canvas.repaint()
+            canvasProvider.repaint()
         }
 
     override fun paint(width: Double, height: Double, context: GraphicsContext) = context.run {
         val body = system?.bodies?.single { it.parent == null } ?: return
 
         fill = Color.BLUE
-        fillCircle(width / 2, height / 2, 10.0)
+        fillCircle(width / 2, height / 2, body.radius.kilometers * canvasProvider.scale)
     }
 }

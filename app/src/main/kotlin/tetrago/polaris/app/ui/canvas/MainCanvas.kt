@@ -8,6 +8,7 @@ class MainCanvas : Canvas(), CanvasProvider, KoinComponent {
     private val painters: List<CanvasPainter> by inject()
 
     override val colors = Colors()
+    override val scale = 0.0001
 
     init {
         widthProperty().addListener { _ -> repaint() }
