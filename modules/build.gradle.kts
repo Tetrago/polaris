@@ -27,7 +27,8 @@ subprojects {
         implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
         implementation("org.slf4j:slf4j-api:$slf4j_version")
 
-        ksp(project(":ksp"))
+        ksp(project(":ksp:module"))
+        ksp(project(":ksp:registry"))
         ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
     }
 

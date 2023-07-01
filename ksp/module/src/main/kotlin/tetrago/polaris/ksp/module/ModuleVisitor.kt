@@ -1,4 +1,4 @@
-package tetrago.polaris.ksp
+package tetrago.polaris.ksp.module
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies

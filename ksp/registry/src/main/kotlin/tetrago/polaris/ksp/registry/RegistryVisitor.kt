@@ -1,4 +1,4 @@
-package tetrago.polaris.ksp
+package tetrago.polaris.ksp.registry
 
 import com.google.devtools.ksp.getDeclaredProperties
 import com.google.devtools.ksp.processing.CodeGenerator
