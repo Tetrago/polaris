@@ -14,8 +14,8 @@ val Configuration = ConfigLoaderBuilder.default()
     .loadConfigOrThrow<Config>()
 
 data class Config(
-    val moduleDirectory: String,
-    val saveDirectory: String
+    private val moduleDirectory: String,
+    private val saveDirectory: String
 ) {
     val modulesPath: Path by lazy {
         moduleDirectory.toPath().also {

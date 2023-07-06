@@ -19,7 +19,7 @@ class MainWindow(stage: Stage) : KoinComponent {
 
     val canvas: MainCanvas
 
-    private val toolbars: List<ToolbarProvider> by inject()
+    private val toolbars: List<ToolbarProvider> by lazy { getKoin().getAll() }
     private val controller: MainController
 
     init {

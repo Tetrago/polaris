@@ -1,38 +1,56 @@
 package tetrago.polaris.sol.save
 
 import javafx.scene.layout.Pane
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.component.inject
 import tetrago.polaris.app.save.SaveDataWriter
-import tetrago.polaris.core.model.Body
-import tetrago.polaris.core.model.data.Orbit
-import tetrago.polaris.core.model.System
-import tetrago.polaris.core.model.registry.BodyTypeHolder
-import tetrago.polaris.core.model.unit.toDst
-import tetrago.polaris.core.model.unit.toRot
+import tetrago.polaris.core.data.Body
+import tetrago.polaris.core.data.BodyTypeRegistry
+import tetrago.polaris.core.data.PlanetarySystem
+import tetrago.polaris.core.data.PlanetarySystemRegistry
+import tetrago.polaris.core.data.model.Orbit
+import tetrago.polaris.core.data.unit.toDst
+import tetrago.polaris.core.data.unit.toRot
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.random.Random
 
-class Writer : SaveDataWriter {
+class Writer : SaveDataWriter, KoinComponent {
+    private val bodyTypeRegistry: BodyTypeRegistry by inject()
+
+    private lateinit var system: PlanetarySystem
+
     override fun loadConfig(): Pane? = null
 
     override fun initialize(random: Random) {
-        System.new {
-            name = "Sol"
-        }.apply {
-            Body("Sun") {
-                radius = 696340.toDst()
-                orbit = Orbit(0.toDst(), 0.toDst(), 0.toRot(), 0.toRot())
-                type = BodyTypeHolder.Star
-            }.apply {
-                terrestrials()
-                gasGiants()
-                iceGiants()
-            }
+        system = PlanetarySystem(name = "Sol")
+
+        Body(
+            name = "Sun",
+            radius = 696340.toDst(),
+            orbit = Orbit(0.toDst(), 0.toDst(), 0.toRot(), 0.toRot()),
+        ).apply {
+            type.target = bodyTypeRegistry.star
+
+            addTerrestrials()
+            addGiants()
+
+            this@Writer.system.bodies.add(this)
         }
+
+        get<PlanetarySystemRegistry>().store.put(system)
     }
 
-    private fun Body.terrestrials() {
-        Body("Mercury") {
+    private fun Body.body(name: String, block: Body.() -> Unit) = Body(name = name).apply {
+        parent.target = this@body
+        block()
+
+        this@Writer.system.bodies.add(this)
+    }
+
+    private fun Body.addTerrestrials() {
+        body("Mercury") {
             radius = 2440.toDst()
             orbit = Orbit(
                 69.8.pow(6).toDst(),
@@ -40,10 +58,10 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.Terrestrial
+            type.target = bodyTypeRegistry.terrestrial
         }
 
-        Body("Venus") {
+        body("Venus") {
             radius = 6052.toDst()
             orbit = Orbit(
                 108.9.pow(6).toDst(),
@@ -51,10 +69,10 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.Terrestrial
+            type.target = bodyTypeRegistry.terrestrial
         }
 
-        Body("Earth") {
+        body("Earth") {
             radius = 6378.toDst()
             orbit = Orbit(
                 152.1.pow(6).toDst(),
@@ -62,14 +80,16 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.Terrestrial
-        }.Body("Moon") {
-            radius = 1737.toDst()
-            orbit = Orbit(404920.toDst(), 367966.toDst(), 0.toRot(), 0.toRot())
-            type = BodyTypeHolder.Terrestrial
+            type.target = bodyTypeRegistry.terrestrial
+
+            body("Moon") {
+                radius = 1737.toDst()
+                orbit = Orbit(404920.toDst(), 367966.toDst(), 0.toRot(), 0.toRot())
+                type.target = bodyTypeRegistry.terrestrial
+            }
         }
 
-        Body("Mars") {
+        body("Mars") {
             radius = 3390.toDst()
             orbit = Orbit(
                 249.3.pow(6).toDst(),
@@ -77,12 +97,12 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.Terrestrial
+            type.target = bodyTypeRegistry.terrestrial
         }
     }
 
-    private fun Body.gasGiants() {
-        Body("Jupiter") {
+    private fun Body.addGiants() {
+        body("Jupiter") {
             radius = 69911.toDst()
             orbit = Orbit(
                 816.4.pow(6).toDst(),
@@ -90,10 +110,10 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.GasGiant
+            type.target = bodyTypeRegistry.gasGiant
         }
 
-        Body("Saturn") {
+        body("Saturn") {
             radius = 58232.toDst()
             orbit = Orbit(
                 1506.5.pow(6).toDst(),
@@ -101,12 +121,10 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.GasGiant
+            type.target = bodyTypeRegistry.gasGiant
         }
-    }
 
-    private fun Body.iceGiants() {
-        Body("Uranus") {
+        body("Uranus") {
             radius = 25362.toDst()
             orbit = Orbit(
                 3001.4.pow(6).toDst(),
@@ -114,10 +132,10 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.IceGiant
+            type.target = bodyTypeRegistry.iceGiant
         }
 
-        Body("Neptune") {
+        body("Neptune") {
             radius = 24622.toDst()
             orbit = Orbit(
                 7375.9.pow(6).toDst(),
@@ -125,7 +143,7 @@ class Writer : SaveDataWriter {
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
-            type = BodyTypeHolder.IceGiant
+            type.target = bodyTypeRegistry.iceGiant
         }
     }
 }

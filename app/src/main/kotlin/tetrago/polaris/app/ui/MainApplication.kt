@@ -23,8 +23,6 @@ class MainApplication : Application(), KoinComponent {
         val result = LauncherDialog().prompt() ?: return
         val reader = SaveReader(result)
 
-        reader.loadDatabase()
-
         startKoin {
             modules(module {
                 single<WindowServiceProvider> { WindowService() }
@@ -33,6 +31,7 @@ class MainApplication : Application(), KoinComponent {
             reader.loadModules(this)
         }
 
+        reader.loadDatabase()
         reader.loadSaveData()
 
         val window = MainWindow(primaryStage!!)

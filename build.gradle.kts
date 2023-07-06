@@ -1,5 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("io.objectbox:objectbox-gradle-plugin:3.6.0")
+    }
+}
+
+val okio_version: String by project
+
 plugins {
     kotlin("jvm") version "1.8.0"
+    kotlin("kapt") version "1.8.0"
     kotlin("plugin.serialization") version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
@@ -15,15 +28,14 @@ allprojects {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "io.objectbox")
 
     dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-
-        testImplementation(kotlin("test"))
-        testImplementation("org.hamcrest:hamcrest:2.2")
-        testImplementation("io.mockk:mockk:1.13.5")
+        implementation("com.squareup.okio:okio:$okio_version")
     }
 
     detekt {

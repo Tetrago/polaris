@@ -2,24 +2,22 @@ package tetrago.polaris.core.save
 
 import io.github.serpro69.kfaker.Faker
 import javafx.scene.layout.Pane
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.koin.core.annotation.Single
 import tetrago.polaris.app.module.ModuleLoader
 import tetrago.polaris.app.save.SaveDataWriter
 import tetrago.polaris.app.ui.Loader
 import tetrago.polaris.core.CoreModule
-import tetrago.polaris.core.model.Atmospheres
-import tetrago.polaris.core.model.Bodies
-import tetrago.polaris.core.model.BodyTypes
-import tetrago.polaris.core.model.Deposits
-import tetrago.polaris.core.model.Gases
-import tetrago.polaris.core.model.Minerals
-import tetrago.polaris.core.model.Species
-import tetrago.polaris.core.model.SpeciesTable
-import tetrago.polaris.core.model.Systems
-import tetrago.polaris.core.model.registry.BodyTypeRegistry
-import tetrago.polaris.core.model.registry.GasRegistry
-import tetrago.polaris.core.model.registry.MineralRegistry
+import tetrago.polaris.core.data.AtmosphereRegistry
+import tetrago.polaris.core.data.BodyRegistry
+import tetrago.polaris.core.data.BodyTypeRegistry
+import tetrago.polaris.core.data.DepositRegistry
+import tetrago.polaris.core.data.GasRegistry
+import tetrago.polaris.core.data.Mineral
+import tetrago.polaris.core.data.MineralRegistry
+import tetrago.polaris.core.data.PlanetarySystem
+import tetrago.polaris.core.data.PlanetarySystemRegistry
+import tetrago.polaris.core.data.Species
+import tetrago.polaris.core.data.SpeciesRegistry
 import tetrago.polaris.core.ui.controller.NewSavePaneController
 import kotlin.random.Random
 
@@ -37,24 +35,5 @@ class Writer : SaveDataWriter {
         }
     }
 
-    override fun initialize(random: Random) {
-        SchemaUtils.create(
-            Atmospheres,
-            Bodies,
-            BodyTypes,
-            Deposits,
-            Gases,
-            Minerals,
-            SpeciesTable,
-            Systems
-        )
-
-        BodyTypeRegistry.create()
-        GasRegistry.create()
-        MineralRegistry.create()
-
-        Species.new {
-            name = controller.speciesName.text
-        }
-    }
+    override fun initialize(random: Random) = Unit
 }

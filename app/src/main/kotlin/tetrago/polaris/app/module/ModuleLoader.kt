@@ -3,6 +3,7 @@ package tetrago.polaris.app.module
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
+import org.koin.core.KoinApplication
 import org.slf4j.LoggerFactory
 import tetrago.polaris.app.config.Configuration
 import tetrago.polaris.module.ModuleProvider

@@ -1,0 +1,267 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8393204658199626",
+      "lastPropertyId": "4:3231752084015765460",
+      "name": "Atmosphere",
+      "properties": [
+        {
+          "id": "1:4008403511278953368",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5012716070625553643",
+          "name": "density",
+          "type": 8
+        },
+        {
+          "id": "3:3949835924492464897",
+          "name": "bodyId",
+          "indexId": "1:7642488743988127023",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Body"
+        },
+        {
+          "id": "4:3231752084015765460",
+          "name": "gasId",
+          "indexId": "2:7934434301535662328",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Gas"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:6360479509695587782",
+      "lastPropertyId": "7:1644489229954565766",
+      "name": "Body",
+      "properties": [
+        {
+          "id": "1:6379936684570645586",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7534551527402369813",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:4165783294092382788",
+          "name": "radius",
+          "type": 8
+        },
+        {
+          "id": "4:6581080535826411298",
+          "name": "orbit",
+          "type": 9
+        },
+        {
+          "id": "5:4968321804359483287",
+          "name": "systemId",
+          "indexId": "3:8530774082318501170",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "PlanetarySystem"
+        },
+        {
+          "id": "6:8651838826193806038",
+          "name": "parentId",
+          "indexId": "4:107337711146184168",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Body"
+        },
+        {
+          "id": "7:1644489229954565766",
+          "name": "typeId",
+          "indexId": "5:7360692450662934983",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "BodyType"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5158817839867472917",
+      "lastPropertyId": "4:8265079483844744089",
+      "name": "BodyType",
+      "properties": [
+        {
+          "id": "1:9023830771266931979",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5477971087601961533",
+          "name": "name",
+          "indexId": "6:6276531533036143711",
+          "type": 9,
+          "flags": 2080
+        },
+        {
+          "id": "3:7084238629159233651",
+          "name": "solid",
+          "type": 1
+        },
+        {
+          "id": "4:8265079483844744089",
+          "name": "colonizable",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8835384911756585166",
+      "lastPropertyId": "4:2522480907799250479",
+      "name": "Deposit",
+      "properties": [
+        {
+          "id": "1:6785785068314051747",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2977879765556796932",
+          "name": "mass",
+          "type": 8
+        },
+        {
+          "id": "3:1062597622773708472",
+          "name": "bodyId",
+          "indexId": "7:820521347012508884",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Body"
+        },
+        {
+          "id": "4:2522480907799250479",
+          "name": "mineralId",
+          "indexId": "8:5811221343099588719",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Mineral"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:799638806744675508",
+      "lastPropertyId": "3:5230111923861595786",
+      "name": "Gas",
+      "properties": [
+        {
+          "id": "1:8767859650241761936",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:758247566594063676",
+          "name": "name",
+          "indexId": "9:5047162276434651147",
+          "type": 9,
+          "flags": 2080
+        },
+        {
+          "id": "3:5230111923861595786",
+          "name": "symbol",
+          "indexId": "10:8080651168522183692",
+          "type": 9,
+          "flags": 2080
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:5296155748746739945",
+      "lastPropertyId": "2:3184158132100052701",
+      "name": "Mineral",
+      "properties": [
+        {
+          "id": "1:671559069024521224",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3184158132100052701",
+          "name": "name",
+          "indexId": "11:262911722515395628",
+          "type": 9,
+          "flags": 2080
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:8188244251126951068",
+      "lastPropertyId": "2:975691938953721174",
+      "name": "PlanetarySystem",
+      "properties": [
+        {
+          "id": "1:1115091100219671549",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:975691938953721174",
+          "name": "name",
+          "indexId": "12:3147691070155291408",
+          "type": 9,
+          "flags": 2080
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:865384658472609261",
+      "lastPropertyId": "2:910650130438576764",
+      "name": "Species",
+      "properties": [
+        {
+          "id": "1:5226148445144293941",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:910650130438576764",
+          "name": "name",
+          "indexId": "13:6561334638408739854",
+          "type": 9,
+          "flags": 2080
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "8:865384658472609261",
+  "lastIndexId": "13:6561334638408739854",
+  "lastRelationId": "3:7039445434102016207",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [
+    7039445434102016207,
+    4092927360902425007,
+    225184466167999026
+  ],
+  "version": 1
+}

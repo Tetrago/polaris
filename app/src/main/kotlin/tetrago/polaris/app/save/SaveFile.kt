@@ -4,17 +4,18 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okio.FileSystem
 import okio.Path
+import org.koin.core.component.getScopeName
 import tetrago.polaris.app.config.Configuration
 
-class SaveFile(val uuid: String) {
+class SaveFile(val directory: Path) {
     val name: String
     val enabledModuleIds: List<String>
 
     init {
-        val content = FileSystem.SYSTEM.read(Configuration.savesPath.resolve("$uuid.json")) { readUtf8() }
-        val desc = Json.decodeFromString<SaveDescription>(content)
-
-        name = desc.name
-        enabledModuleIds = desc.modules
+        val content = FileSystem.SYSTEM.read(directory.resolve("save.json")) { readUtf8() }
+        Json.decodeFromString<SaveDescription>(content).also {
+            name = it.name
+            enabledModuleIds = it.modules
+        }
     }
 }

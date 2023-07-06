@@ -42,9 +42,7 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
             SaveWriter(controller.nameField.text, modules).apply {
                 writeSaveDescription()
 
-                try {
-                    writeSaveData(controller.seedField.text.toInt())
-                } catch(_: SaveWriter.AbortException) {
+                if(!writeSaveData(controller.seedField.text.toInt())) {
                     FileSystem.SYSTEM.delete("saves/$uuid.json".toPath())
                     FileSystem.SYSTEM.delete("saves/$uuid.db".toPath())
                 }

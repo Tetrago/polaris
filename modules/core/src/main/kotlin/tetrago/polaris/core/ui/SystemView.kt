@@ -6,12 +6,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tetrago.polaris.app.ui.canvas.CanvasPainter
 import tetrago.polaris.app.ui.canvas.CanvasProvider
-import tetrago.polaris.core.model.System
+import tetrago.polaris.core.data.PlanetarySystem
 
 class SystemView : CanvasPainter, KoinComponent {
     private val canvasProvider: CanvasProvider by inject()
 
-    var system: System? = null
+    var system: PlanetarySystem? = null
         set(value) {
             field = value
             canvasProvider.repaint()

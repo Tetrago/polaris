@@ -4,12 +4,16 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 import tetrago.polaris.app.save.SaveDataWriter
 import tetrago.polaris.module.ModuleProvider
-import tetrago.polaris.module.Polaris
+import tetrago.polaris.module.Mod
 import tetrago.polaris.sol.save.Writer
 
-@Polaris
+@Mod
 class SolModule : ModuleProvider {
-    override val id: String = "tetrago.polaris.sol"
+    companion object {
+        const val ID = "tetrago.polaris.sol"
+    }
+
+    override val id: String = ID
     override val name: String = "Sol System"
 
     override val dependencies: List<String> = listOf("tetrago.polaris.core")

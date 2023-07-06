@@ -5,7 +5,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class MainCanvas : Canvas(), CanvasProvider, KoinComponent {
-    private val painters: List<CanvasPainter> by inject()
+    private val painters: List<CanvasPainter> by lazy { getKoin().getAll() }
 
     override val colors = Colors()
     override val scale = 0.0001
