@@ -7,7 +7,7 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import tetrago.polaris.app.ui.window.WindowServiceProvider
+import tetrago.polaris.app.ui.window.WindowService
 import java.io.InputStream
 
 open class IconToolbar(
@@ -15,7 +15,7 @@ open class IconToolbar(
     private val window: String,
     private val icon: InputStream
 ) : ToolbarProvider, KoinComponent {
-    private val windowService: WindowServiceProvider by inject()
+    private val windowService: WindowService by inject()
 
     override fun build(): Button {
         return Button().apply {

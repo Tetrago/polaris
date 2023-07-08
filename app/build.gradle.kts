@@ -4,11 +4,25 @@ val koin_ksp_version: String by rootProject
 val kotlin_faker_version: String by rootProject
 val slf4j_version: String by rootProject
 
+buildscript {
+    val objectBoxVersion: String by rootProject.extra
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("io.objectbox:objectbox-gradle-plugin:$objectBoxVersion")
+    }
+}
+
 plugins {
     application
     id("com.google.devtools.ksp") version "1.8.0-1.0.9"
     id("org.openjfx.javafxplugin") version "0.0.14"
 }
+
+apply(plugin = "io.objectbox")
 
 dependencies {
     implementation(project(":annotations"))

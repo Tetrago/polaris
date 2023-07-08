@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 
 abstract class ResultDialog<T, R>(title: String, path: String, module: ModuleProvider? = null) : Stage() {
     val controller: T
-    protected var result: R? = null
+    private var result: R? = null
 
     init {
         this.title = title
@@ -30,5 +30,10 @@ abstract class ResultDialog<T, R>(title: String, path: String, module: ModulePro
     fun prompt(): R? {
         showAndWait()
         return result
+    }
+
+    fun close(result: R) {
+        this.result = result
+        close()
     }
 }

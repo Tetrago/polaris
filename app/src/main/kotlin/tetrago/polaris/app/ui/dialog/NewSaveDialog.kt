@@ -8,6 +8,7 @@ import okio.FileSystem
 import okio.Path.Companion.toPath
 import org.slf4j.LoggerFactory
 import tetrago.polaris.app.module.ModuleLoader
+import tetrago.polaris.app.save.SaveFile
 import tetrago.polaris.app.save.SaveWriter
 import tetrago.polaris.app.ui.controller.NewSaveController
 import kotlin.math.absoluteValue
@@ -19,10 +20,7 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
     }
 
     init {
-        onCloseRequest = EventHandler {
-            result = false
-            close()
-        }
+        onCloseRequest = EventHandler { close(false) }
 
         controller.modulesList.apply {
             items.addAll(ModuleLoader.modules.map { it.name })
@@ -32,24 +30,20 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
         }
 
         controller.cancelButton.setOnAction {
-            result = false
-            close()
+            close(false)
         }
 
         controller.continueButton.setOnAction {
             val modules = ModuleLoader.modules.zip(moduleBoxes).filter { it.second.get() }.map { it.first }
 
-            SaveWriter(controller.nameField.text, modules).apply {
-                writeSaveDescription()
-
-                if(!writeSaveData(controller.seedField.text.toInt())) {
-                    FileSystem.SYSTEM.delete("saves/$uuid.json".toPath())
-                    FileSystem.SYSTEM.delete("saves/$uuid.db".toPath())
+            val file = SaveFile(controller.nameField.text, modules)
+            SaveWriter(file).apply {
+                if(!write(controller.seedField.text.toInt())) {
+                    FileSystem.SYSTEM.delete(file.directory)
                 }
             }
 
-            result = true
-            close()
+            close(true)
         }
 
         controller.nameField.apply {

@@ -1,14 +1,8 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("io.objectbox:objectbox-gradle-plugin:3.6.0")
-    }
-}
-
 val okio_version: String by project
+
+buildscript {
+    val objectBoxVersion by extra("3.6.0")
+}
 
 plugins {
     kotlin("jvm") version "1.8.0"
@@ -31,7 +25,6 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "io.gitlab.arturbosch.detekt")
-    apply(plugin = "io.objectbox")
 
     dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")

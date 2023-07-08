@@ -6,7 +6,7 @@ import org.koin.core.annotation.Single
 import org.koin.mp.KoinPlatform.getKoin
 
 @Single
-class WindowService : WindowServiceProvider {
+class WindowService {
     private val windows: List<Window> = getKoin().getAll()
     private val stages = windows.map {
         val stage = Stage()
@@ -17,7 +17,7 @@ class WindowService : WindowServiceProvider {
         it.tag to stage
     }.toMap()
 
-    override fun open(tag: String) {
+    fun open(tag: String) {
         stages[tag]?.let {
             if(it.isShowing) {
                 it.toFront()
@@ -27,7 +27,7 @@ class WindowService : WindowServiceProvider {
         }
     }
 
-    override fun close(tag: String) {
+    fun close(tag: String) {
         stages[tag]?.hide()
     }
 }

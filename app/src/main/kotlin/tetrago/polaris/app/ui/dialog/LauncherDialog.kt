@@ -21,7 +21,7 @@ class LauncherDialog : ResultDialog<LauncherController, SaveFile>("Polaris", "la
                 object : ListCell<SaveFile>() {
                     override fun updateItem(item: SaveFile?, empty: Boolean) {
                         super.updateItem(item, empty)
-                        text = item?.name
+                        text = item?.description?.name
                     }
                 }
             }
@@ -29,8 +29,14 @@ class LauncherDialog : ResultDialog<LauncherController, SaveFile>("Polaris", "la
                 controller.loadButton.isDisable = new == null
 
                 new?.let {
+                    controller.loadButton.isDisable = false
+
                     modules.clear()
-                    modules.addAll(ModuleLoader.resolve(new.enabledModuleIds))
+                    modules.addAll(ModuleLoader.resolve(new.description.modules))
+
+                    if(modules.any { it.provider == null }) {
+                        controller.loadButton.isDisable = true
+                    }
                 }
             }
         }
@@ -52,8 +58,7 @@ class LauncherDialog : ResultDialog<LauncherController, SaveFile>("Polaris", "la
 
         controller.loadButton.apply {
             setOnAction {
-                result = controller.saveList.selectionModel.selectedItem
-                close()
+                close(controller.saveList.selectionModel.selectedItem)
             }
 
             // Select a save first

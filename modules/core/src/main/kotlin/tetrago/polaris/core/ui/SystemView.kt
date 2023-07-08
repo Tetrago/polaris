@@ -18,9 +18,11 @@ class SystemView : CanvasPainter, KoinComponent {
         }
 
     override fun paint(width: Double, height: Double, context: GraphicsContext) = context.run {
-        val body = system?.bodies?.single { it.parent == null } ?: return
+        val body = system?.bodies?.single { it.parent.target == null } ?: return
 
         fill = Color.BLUE
         fillCircle(width / 2, height / 2, body.radius.kilometers * canvasProvider.scale)
+
+        println(body.radius.kilometers * canvasProvider.scale)
     }
 }

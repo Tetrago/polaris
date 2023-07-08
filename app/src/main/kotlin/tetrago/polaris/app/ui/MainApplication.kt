@@ -6,13 +6,12 @@ import javafx.stage.Stage
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import tetrago.polaris.app.module.ModuleLoader
 import tetrago.polaris.app.save.SaveReader
 import tetrago.polaris.app.ui.canvas.CanvasProvider
 import tetrago.polaris.app.ui.dialog.LauncherDialog
 import tetrago.polaris.app.ui.window.WindowService
-import tetrago.polaris.app.ui.window.WindowServiceProvider
 
 class MainApplication : Application(), KoinComponent {
     companion object {
@@ -23,23 +22,19 @@ class MainApplication : Application(), KoinComponent {
         val result = LauncherDialog().prompt() ?: return
         val reader = SaveReader(result)
 
-        startKoin {
-            modules(module {
-                single<WindowServiceProvider> { WindowService() }
-            })
-
-            reader.loadModules(this)
-        }
-
-        reader.loadDatabase()
-        reader.loadSaveData()
+        startKoin { }
+        reader.read()
 
         val window = MainWindow(primaryStage!!)
 
         loadKoinModules(module {
             single<CanvasProvider> { window.canvas }
+            single { WindowService() }
         })
 
+        reader.init()
         primaryStage.show()
+
+        stopKoin()
     }
 }

@@ -2,7 +2,6 @@ package tetrago.polaris.app.ui.canvas
 
 import javafx.scene.canvas.Canvas
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class MainCanvas : Canvas(), CanvasProvider, KoinComponent {
     private val painters: List<CanvasPainter> by lazy { getKoin().getAll() }
