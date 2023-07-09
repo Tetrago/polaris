@@ -29,7 +29,7 @@ class Writer : SaveDataWriter, KoinComponent {
         Body(
             name = "Sun",
             radius = 696340.toDst(),
-            orbit = Orbit(0.toDst(), 0.toDst(), 0.toRot(), 0.toRot()),
+            orbit = Orbit(0.toDst(), 0.toDst(), 1.0, 0.toRot(), 0.toRot()),
         ).apply {
             type.target = bodyTypeRegistry.star
 
@@ -49,12 +49,15 @@ class Writer : SaveDataWriter, KoinComponent {
         this@Writer.system.bodies.add(this)
     }
 
+    private fun Double.exp(v: Int) = this@exp * 10.0.pow(v)
+
     private fun Body.addTerrestrials() {
         body("Mercury") {
             radius = 2440.toDst()
             orbit = Orbit(
-                69.8.pow(6).toDst(),
-                46.0.pow(6).toDst(),
+                69.8.exp(6).toDst(),
+                46.0.exp(6).toDst(),
+                0.206,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -64,8 +67,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Venus") {
             radius = 6052.toDst()
             orbit = Orbit(
-                108.9.pow(6).toDst(),
-                107.5.pow(6).toDst(),
+                108.9.exp(6).toDst(),
+                107.5.exp(6).toDst(),
+                0.007,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -75,8 +79,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Earth") {
             radius = 6378.toDst()
             orbit = Orbit(
-                152.1.pow(6).toDst(),
-                147.1.pow(6).toDst(),
+                152.1.exp(6).toDst(),
+                147.1.exp(6).toDst(),
+                0.017,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -84,7 +89,7 @@ class Writer : SaveDataWriter, KoinComponent {
 
             body("Moon") {
                 radius = 1737.toDst()
-                orbit = Orbit(404920.toDst(), 367966.toDst(), 0.toRot(), 0.toRot())
+                orbit = Orbit(404920.toDst(), 367966.toDst(), 0.055, 0.toRot(), 0.toRot())
                 type.target = bodyTypeRegistry.terrestrial
             }
         }
@@ -92,8 +97,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Mars") {
             radius = 3390.toDst()
             orbit = Orbit(
-                249.3.pow(6).toDst(),
-                206.7.pow(6).toDst(),
+                249.3.exp(6).toDst(),
+                206.7.exp(6).toDst(),
+                0.094,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -105,8 +111,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Jupiter") {
             radius = 69911.toDst()
             orbit = Orbit(
-                816.4.pow(6).toDst(),
-                740.6.pow(6).toDst(),
+                816.4.exp(6).toDst(),
+                740.6.exp(6).toDst(),
+                0.049,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -116,8 +123,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Saturn") {
             radius = 58232.toDst()
             orbit = Orbit(
-                1506.5.pow(6).toDst(),
-                1357.6.pow(6).toDst(),
+                1506.5.exp(6).toDst(),
+                1357.6.exp(6).toDst(),
+                0.052,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -127,8 +135,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Uranus") {
             radius = 25362.toDst()
             orbit = Orbit(
-                3001.4.pow(6).toDst(),
-                2732.7.pow(6).toDst(),
+                3001.4.exp(6).toDst(),
+                2732.7.exp(6).toDst(),
+                0.047,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )
@@ -138,8 +147,9 @@ class Writer : SaveDataWriter, KoinComponent {
         body("Neptune") {
             radius = 24622.toDst()
             orbit = Orbit(
-                7375.9.pow(6).toDst(),
-                4436.8.pow(6).toDst(),
+                7375.9.exp(6).toDst(),
+                4436.8.exp(6).toDst(),
+                0.010,
                 0.toRot(),
                 Random.nextDouble(PI).toRot()
             )

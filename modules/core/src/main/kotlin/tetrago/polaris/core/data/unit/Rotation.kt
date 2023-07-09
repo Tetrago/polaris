@@ -15,6 +15,8 @@ data class Rotation(
     val radians: Double
 ) {
     val degrees get() = radians * 180.0 / PI
+
+    fun toDouble() = radians
 }
 
 enum class RotationUnit {
@@ -31,7 +33,7 @@ fun Number.toRot(unit: RotationUnit = RotationUnit.RADIANS): Rotation {
 
 class RotationConverter : PropertyConverter<Rotation?, Double?> {
     override fun convertToEntityProperty(databaseValue: Double?): Rotation? = databaseValue?.toRot()
-    override fun convertToDatabaseValue(entityProperty: Rotation?): Double? = entityProperty?.radians
+    override fun convertToDatabaseValue(entityProperty: Rotation?): Double? = entityProperty?.toDouble()
 }
 
 object RotationSerializer : KSerializer<Rotation> {
@@ -42,6 +44,6 @@ object RotationSerializer : KSerializer<Rotation> {
     }
 
     override fun serialize(encoder: Encoder, value: Rotation) {
-        encoder.encodeDouble(value.radians)
+        encoder.encodeDouble(value.toDouble())
     }
 }

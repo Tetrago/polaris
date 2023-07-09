@@ -12,7 +12,9 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(with = DensitySerializer::class)
 data class Density(
     val kilogramsPerCubicMeter: Double
-)
+) {
+    fun toDouble() = kilogramsPerCubicMeter
+}
 
 enum class DensityUnit {
     KILOGRAMS_PER_CUBIC_METER
@@ -26,7 +28,7 @@ fun Number.toDensity(unit: DensityUnit = DensityUnit.KILOGRAMS_PER_CUBIC_METER):
 
 class DensityConverter : PropertyConverter<Density?, Double?> {
     override fun convertToEntityProperty(databaseValue: Double?): Density? = databaseValue?.toDensity()
-    override fun convertToDatabaseValue(entityProperty: Density?): Double? = entityProperty?.kilogramsPerCubicMeter
+    override fun convertToDatabaseValue(entityProperty: Density?): Double? = entityProperty?.toDouble()
 }
 
 object DensitySerializer : KSerializer<Density> {
@@ -37,6 +39,6 @@ object DensitySerializer : KSerializer<Density> {
     }
 
     override fun serialize(encoder: Encoder, value: Density) {
-        encoder.encodeDouble(value.kilogramsPerCubicMeter)
+        encoder.encodeDouble(value.toDouble())
     }
 }

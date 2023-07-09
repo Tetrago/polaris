@@ -7,9 +7,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import tetrago.polaris.app.save.SaveReader
-import tetrago.polaris.app.ui.canvas.CanvasProvider
+import tetrago.polaris.app.ui.canvas.CanvasPainter
+import tetrago.polaris.app.ui.canvas.BackgroundPainter
 import tetrago.polaris.app.ui.dialog.LauncherDialog
 import tetrago.polaris.app.ui.window.WindowService
 
@@ -25,12 +27,12 @@ class MainApplication : Application(), KoinComponent {
         startKoin { }
         reader.read()
 
-        val window = MainWindow(primaryStage!!)
-
         loadKoinModules(module {
-            single<CanvasProvider> { window.canvas }
+            single { BackgroundPainter() } bind CanvasPainter::class
             single { WindowService() }
         })
+
+        MainWindow(primaryStage!!)
 
         reader.init()
         primaryStage.show()

@@ -3,11 +3,12 @@ package tetrago.polaris.app.ui
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.Scene
-import javafx.scene.image.Image
 import javafx.stage.Stage
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
 import org.slf4j.LoggerFactory
+import tetrago.polaris.app.ui.canvas.CanvasProvider
 import tetrago.polaris.app.ui.canvas.MainCanvas
 import tetrago.polaris.app.ui.controller.MainController
 import tetrago.polaris.app.ui.toolbar.ToolbarProvider
@@ -17,7 +18,7 @@ class MainWindow(stage: Stage) : KoinComponent {
         private val logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    val canvas: MainCanvas
+    private val canvas: MainCanvas
 
     private val toolbars: List<ToolbarProvider> by lazy { getKoin().getAll() }
     private val controller: MainController
@@ -36,6 +37,10 @@ class MainWindow(stage: Stage) : KoinComponent {
         controller.toolbar.items.addAll(toolbars.map { it.build() })
 
         canvas = MainCanvas().apply {
+            loadKoinModules(module {
+                single<CanvasProvider> { this@apply }
+            })
+
             widthProperty().bind(controller.canvasPane.widthProperty())
             heightProperty().bind(controller.canvasPane.heightProperty())
 

@@ -12,7 +12,8 @@ import tetrago.polaris.core.data.unit.Rotation
 data class Orbit(
     val apoapsis: Distance,
     val periapsis: Distance,
-    val path: Rotation,
+    val eccentricity: Double,
+    val skew: Rotation,
     val offset: Rotation
 )
 

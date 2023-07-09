@@ -14,6 +14,8 @@ data class Mass(
     val tonnes: Double
 ) {
     val kilograms get() = tonnes * 1000.0
+
+    fun toDouble() = tonnes
 }
 
 enum class MassUnit {
@@ -28,7 +30,7 @@ fun Number.toMass(unit: MassUnit = MassUnit.TONNES): Mass {
 
 class MassConverter : PropertyConverter<Mass?, Double?> {
     override fun convertToEntityProperty(databaseValue: Double?): Mass? = databaseValue?.toMass()
-    override fun convertToDatabaseValue(entityProperty: Mass?): Double? = entityProperty?.tonnes
+    override fun convertToDatabaseValue(entityProperty: Mass?): Double? = entityProperty?.toDouble()
 }
 
 object MassSerializer : KSerializer<Mass> {
@@ -39,6 +41,6 @@ object MassSerializer : KSerializer<Mass> {
     }
 
     override fun serialize(encoder: Encoder, value: Mass) {
-        encoder.encodeDouble(value.tonnes)
+        encoder.encodeDouble(value.toDouble())
     }
 }

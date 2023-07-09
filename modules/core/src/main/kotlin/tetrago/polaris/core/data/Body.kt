@@ -28,6 +28,8 @@ data class Body(
 ) {
     var system: ToOne<PlanetarySystem> = ToOne(this, Body_.system)
     var parent: ToOne<Body> = ToOne(this, Body_.parent)
+    @Backlink(to = "parent")
+    var moons: ToMany<Body> = ToMany(this, Body_.moons)
     var type: ToOne<BodyType> = ToOne(this, Body_.type)
     @Backlink(to = "body")
     var deposits: ToMany<Deposit> = ToMany(this, Body_.deposits)

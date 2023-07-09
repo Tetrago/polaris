@@ -12,6 +12,8 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(with = DistanceSerializer::class)
 data class Distance(val kilometers: Double) {
     val meters get() = kilometers * 1000.0
+
+    fun toDouble() = kilometers
 }
 
 enum class DistanceUnit {
@@ -28,7 +30,7 @@ fun Number.toDst(unit: DistanceUnit = DistanceUnit.KILOMETERS): Distance {
 
 class DistanceConverter : PropertyConverter<Distance?, Double?> {
     override fun convertToEntityProperty(databaseValue: Double?): Distance? = databaseValue?.toDst()
-    override fun convertToDatabaseValue(entityProperty: Distance?): Double? = entityProperty?.kilometers
+    override fun convertToDatabaseValue(entityProperty: Distance?): Double? = entityProperty?.toDouble()
 }
 
 object DistanceSerializer : KSerializer<Distance> {
@@ -39,6 +41,6 @@ object DistanceSerializer : KSerializer<Distance> {
     }
 
     override fun serialize(encoder: Encoder, value: Distance) {
-        encoder.encodeDouble(value.kilometers)
+        encoder.encodeDouble(value.toDouble())
     }
 }
