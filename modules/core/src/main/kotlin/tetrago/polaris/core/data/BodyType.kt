@@ -24,6 +24,7 @@ class BodyTypeRegistry : Registry<CoreDataStore, BodyType>(CoreDataStore::class,
     var gasGiant by hold("Gas Giant")
     var iceGiant by hold("Ice Giant")
     var asteroid by hold("Asteroid")
+    var anchor by hold("Anchor")
 
     override fun create() {
         star = BodyType(solid = false, colonizable = false)
@@ -31,5 +32,6 @@ class BodyTypeRegistry : Registry<CoreDataStore, BodyType>(CoreDataStore::class,
         gasGiant = BodyType(solid = false, colonizable = false)
         iceGiant = BodyType(solid = false, colonizable = false)
         asteroid = BodyType(solid = true, colonizable = false)
+        anchor = BodyType()
     }
 }

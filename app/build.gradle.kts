@@ -1,7 +1,6 @@
 val hoplite_version: String by rootProject
 val koin_version: String by rootProject
 val koin_ksp_version: String by rootProject
-val kotlin_faker_version: String by rootProject
 val slf4j_version: String by rootProject
 
 buildscript {
@@ -29,7 +28,6 @@ dependencies {
 
     implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
     implementation("com.sksamuel.hoplite:hoplite-toml:$hoplite_version")
-    implementation("io.github.serpro69:kotlin-faker:$kotlin_faker_version")
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")

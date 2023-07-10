@@ -1,12 +1,9 @@
 package tetrago.polaris.app.ui.dialog
 
-import io.github.serpro69.kfaker.Faker
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.event.EventHandler
 import javafx.scene.control.cell.CheckBoxListCell
 import okio.FileSystem
-import okio.Path.Companion.toPath
-import org.slf4j.LoggerFactory
 import tetrago.polaris.app.module.ModuleLoader
 import tetrago.polaris.app.save.SaveFile
 import tetrago.polaris.app.save.SaveWriter
@@ -33,25 +30,27 @@ class NewSaveDialog : ResultDialog<NewSaveController, Boolean>("New Save", "new_
             close(false)
         }
 
-        controller.continueButton.setOnAction {
-            val modules = ModuleLoader.modules.zip(moduleBoxes).filter { it.second.get() }.map { it.first }
+        controller.continueButton.apply {
+            isDisable = true
 
-            val file = SaveFile(controller.nameField.text, modules)
-            SaveWriter(file).apply {
-                if(!write(controller.seedField.text.toInt())) {
-                    FileSystem.SYSTEM.delete(file.directory)
+            setOnAction {
+                val modules = ModuleLoader.modules.zip(moduleBoxes).filter { it.second.get() }.map { it.first }
+
+                val file = SaveFile(controller.nameField.text, modules)
+                SaveWriter(file).apply {
+                    if(!write(controller.seedField.text.toInt())) {
+                        FileSystem.SYSTEM.delete(file.directory)
+                    }
                 }
-            }
 
-            close(true)
+                close(true)
+            }
         }
 
         controller.nameField.apply {
-            text = Faker().ancient.primordial()
-            textProperty().addListener { _, oldValue, newValue ->
-                if(newValue.isEmpty() || newValue.matches(Regex(".*[\\\\\"].*"))) {
-                    text = oldValue
-                }
+            textProperty().addListener { _, _, newValue ->
+                val invalid = newValue.isEmpty() || newValue.matches(Regex(".*[\\\\\"].*"))
+                controller.continueButton.isDisable = invalid
             }
         }
 
