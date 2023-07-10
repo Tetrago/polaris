@@ -9,6 +9,7 @@ import tetrago.polaris.app.ui.canvas.CanvasPainter
 import tetrago.polaris.app.ui.canvas.CanvasProvider
 import tetrago.polaris.app.ui.canvas.scope
 import tetrago.polaris.core.data.Body
+import tetrago.polaris.core.data.BodyTypeRegistry
 import tetrago.polaris.core.data.PlanetarySystem
 import kotlin.math.PI
 import kotlin.math.cos
@@ -18,6 +19,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class SystemView : CanvasPainter(), KoinComponent {
+    private val bodyTypeRegistry: BodyTypeRegistry by inject()
     private val canvasProvider: CanvasProvider by inject()
 
     var bodyColor: Color by hold(Color.BLUE)
@@ -36,36 +38,38 @@ class SystemView : CanvasPainter(), KoinComponent {
     }
 
     private fun GraphicsContext.drawBody(body: Body) {
-        val orbit = body.orbit!!
+        if(body.type.target != bodyTypeRegistry.anchor) {
+            body.orbit?.let { orbit ->
+                val d = (orbit.apoapsis.toDouble() - orbit.periapsis.toDouble()) * canvasProvider.viewport.fixedScale / 2
+                val m = (orbit.apoapsis.toDouble() + orbit.periapsis.toDouble()) * canvasProvider.viewport.fixedScale / 2
+                val n = m * sqrt(1 - orbit.eccentricity.pow(2))
 
-        val d = (orbit.apoapsis.toDouble() - orbit.periapsis.toDouble()) * canvasProvider.viewport.fixedScale / 2
-        val m = (orbit.apoapsis.toDouble() + orbit.periapsis.toDouble()) * canvasProvider.viewport.fixedScale / 2
-        val n = m * sqrt(1 - orbit.eccentricity.pow(2))
+                val (dx, dy) = d * cos(orbit.skew.radians + PI) to d * sin(orbit.skew.radians + PI)
 
-        val (dx, dy) = d * cos(orbit.skew.radians + PI) to d * sin(orbit.skew.radians + PI)
+                translate(dx, dy)
+                rotate(-orbit.skew.degrees)
 
-        translate(dx, dy)
-        rotate(-orbit.skew.degrees)
+                stroke = orbitColor
+                lineWidth = 1 / canvasProvider.viewport.scale
+                strokeOval(-m, -n, m * 2, n * 2)
 
-        stroke = orbitColor
-        lineWidth = 1 / canvasProvider.viewport.scale
-        strokeOval(-m, -n, m * 2, n * 2)
+                translate(m * cos(orbit.offset.radians), n * sin(orbit.offset.radians))
+            }
 
-        translate(m * cos(orbit.offset.radians), n * sin(orbit.offset.radians))
+            val radius = body.radius.toDouble() * canvasProvider.viewport.fixedScale
+            fill = bodyColor
+            fillOval(-radius, -radius, radius * 2, radius * 2)
 
-        val radius = body.radius.toDouble() * canvasProvider.viewport.fixedScale
-        fill = bodyColor
-        fillOval(-radius, -radius, radius * 2, radius * 2)
-
-        val guideDiameter = min(canvasProvider.viewport.width, canvasProvider.viewport.height) *
-                (1 / canvasProvider.viewport.scale) * guideScale
-        if(guideDiameter < radius * 2) {
-            fill = labelColor
-            font = Font.font(12 / canvasProvider.viewport.scale)
-            fillText(body.name, guideDiameter, font.size / 2)
-        } else {
-            stroke = guideColor
-            strokeOval(-guideDiameter / 2, -guideDiameter / 2, guideDiameter, guideDiameter)
+            val guideDiameter = min(canvasProvider.viewport.width, canvasProvider.viewport.height) *
+                    (1 / canvasProvider.viewport.scale) * guideScale
+            if(guideDiameter < radius * 2) {
+                fill = labelColor
+                font = Font.font(12 / canvasProvider.viewport.scale)
+                fillText(body.name, guideDiameter, font.size / 2)
+            } else {
+                stroke = guideColor
+                strokeOval(-guideDiameter / 2, -guideDiameter / 2, guideDiameter, guideDiameter)
+            }
         }
 
         body.moons.forEach {

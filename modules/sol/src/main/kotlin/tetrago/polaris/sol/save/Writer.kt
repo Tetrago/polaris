@@ -28,8 +28,7 @@ class Writer : SaveDataWriter, KoinComponent {
 
         Body(
             name = "Sun",
-            radius = 696340.toDst(),
-            orbit = Orbit(0.toDst(), 0.toDst(), 1.0, 0.toRot(), 0.toRot()),
+            radius = 696340.toDst()
         ).apply {
             type.target = bodyTypeRegistry.star
 
