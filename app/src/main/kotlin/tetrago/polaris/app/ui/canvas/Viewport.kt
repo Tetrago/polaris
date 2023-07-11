@@ -3,16 +3,16 @@ package tetrago.polaris.app.ui.canvas
 import kotlin.math.sign
 
 class Viewport {
-    var fixedScale: Double = 0.0001
-    var scale: Double = 1.0
-    var scrollSpeed: Double = 0.1
-    var x: Double = 0.0
-    var y: Double = 0.0
+    var fixedScale: Float = 0.0001f
+    var scale: Float = 1f
+    var scrollSpeed: Float = 0.1f
+    var x: Float = 0f
+    var y: Float = 0f
 
-    var width: Double = 0.0
-    var height: Double = 0.0
+    var width: Float = 0f
+    var height: Float = 0f
 
-    fun zoom(mouseX: Double, mouseY: Double, delta: Double) {
+    fun zoom(mouseX: Float, mouseY: Float, delta: Float) {
         scale *= 1 + scrollSpeed * sign(delta)
 
         translate(
@@ -21,7 +21,7 @@ class Viewport {
         )
     }
 
-    fun translate(dx: Double, dy: Double) {
+    fun translate(dx: Float, dy: Float) {
         x += dx
         y += dy
     }

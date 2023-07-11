@@ -1,14 +1,13 @@
 package tetrago.polaris.app.ui.canvas
 
-import javafx.scene.canvas.GraphicsContext
-import javafx.scene.paint.Color
-import org.koin.core.component.KoinComponent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import tetrago.polaris.app.koin.ModuleKoinComponent
 
-class BackgroundPainter : CanvasPainter(), KoinComponent {
-    var backgroundColor: Color by hold(Color.BLACK)
+class BackgroundPainter : CanvasPainter(), ModuleKoinComponent {
+    var backgroundColor: Color by hold(Color.Black)
 
-    override fun GraphicsContext.prePaint(width: Double, height: Double) {
-        fill = backgroundColor
-        fillRect(0.0, 0.0, width, height)
+    override fun DrawScope.prePaint() {
+        drawRect(backgroundColor)
     }
 }

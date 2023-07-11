@@ -1,7 +1,7 @@
 package tetrago.polaris.app.data
 
 import io.objectbox.Property
-import org.koin.core.context.GlobalContext.get
+import tetrago.polaris.app.koin.getModuleKoin
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
@@ -19,7 +19,7 @@ abstract class Registry<P : DataStoreProvider, E : Any>(
 
     private val field by lazy { entity.java.getDeclaredField(column!!.name).also { it.isAccessible = true } }
 
-    val store by lazy { get().get<P>(provider).get().boxFor(entity.java) }
+    val store by lazy { getModuleKoin().get<P>(provider).get().boxFor(entity.java) }
 
     override fun create() = Unit
 

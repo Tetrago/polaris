@@ -1,6 +1,6 @@
 package tetrago.polaris.app.ui.canvas
 
-import javafx.scene.canvas.GraphicsContext
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import org.koin.core.context.GlobalContext.get
 import kotlin.reflect.KProperty
 
@@ -16,6 +16,6 @@ abstract class CanvasPainter {
 
     protected fun <T> hold(value: T) = Holder(value)
 
-    open fun GraphicsContext.prePaint(width: Double, height: Double) = Unit
-    open fun GraphicsContext.paint(width: Double, height: Double) = Unit
+    open fun DrawScope.prePaint() = Unit
+    open fun DrawScope.paint() = Unit
 }

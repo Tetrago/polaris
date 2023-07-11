@@ -1,10 +1,12 @@
 package tetrago.polaris.app.save
 
-import javafx.scene.layout.Pane
+import androidx.compose.runtime.Composable
+import org.pushingpixels.aurora.window.AuroraApplicationScope
 import kotlin.random.Random
 
 interface SaveDataWriter {
-    fun loadConfig(): Pane?
+    @Composable
+    fun display()
 
     fun initialize(random: Random)
 }

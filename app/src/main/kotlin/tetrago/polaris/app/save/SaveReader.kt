@@ -5,7 +5,7 @@ import tetrago.polaris.app.module.ModuleLifecycleProvider
 
 class SaveReader(private val file: SaveFile) {
     fun read() {
-        SaveLifecycle().read(file)
+        SaveLifecycle.read(file)
     }
 
     fun init() {

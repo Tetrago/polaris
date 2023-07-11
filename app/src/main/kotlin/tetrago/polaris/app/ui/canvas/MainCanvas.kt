@@ -1,72 +1,62 @@
 package tetrago.polaris.app.ui.canvas
 
-import javafx.beans.value.ObservableDoubleValue
-import javafx.scene.canvas.Canvas
-import javafx.scene.canvas.GraphicsContext
-import javafx.scene.input.MouseDragEvent
-import javafx.scene.input.MouseEvent
-import javafx.scene.input.ScrollEvent
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.modifier.modifierLocalMapOf
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextMeasurer
+import com.sksamuel.hoplite.fp.invalid
 import org.koin.core.component.KoinComponent
+import org.koin.core.context.GlobalContext.get
+import tetrago.polaris.app.koin.getModuleKoin
 
-class MainCanvas : Canvas(), CanvasProvider, KoinComponent {
-    private val painters: List<CanvasPainter> by lazy { getKoin().getAll() }
+@OptIn(ExperimentalTextApi::class)
+class MainCanvas : CanvasProvider {
+    private val painters: List<CanvasPainter> by lazy { getModuleKoin().getAll() }
 
     override val viewport = Viewport()
+    override val textMeasurer: TextMeasurer get() = _textMeasurer.value
 
-    init {
-        widthProperty().addListener { observable ->
-            viewport.width = (observable as ObservableDoubleValue).get()
-            repaint()
-        }
+    lateinit var _textMeasurer: MutableState<TextMeasurer>
 
-        heightProperty().addListener { observable ->
-            viewport.height = (observable as ObservableDoubleValue).get()
-            repaint()
-        }
+    val invalidations = mutableStateOf(0)
 
-        addEventFilter(ScrollEvent.SCROLL) {
-            viewport.zoom(it.x, it.y, it.deltaY)
-            repaint()
-        }
+    override fun repaint() {
+        ++invalidations.value
+    }
 
-        var mouse: Pair<Double, Double>? = null
+    @Composable
+    fun paint() {
+        val invalidations by remember { invalidations }
 
-        addEventFilter(MouseEvent.MOUSE_PRESSED) { mouse = it.x to it.y }
-        addEventFilter(MouseEvent.MOUSE_RELEASED) { mouse = null }
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            viewport.width = size.width
+            viewport.height = size.height
 
-        addEventFilter(MouseDragEvent.MOUSE_DRAGGED) {
-            mouse?.let { pair ->
-                val dx = it.x - pair.first
-                val dy = it.y - pair.second
+            invalidations.let {
+                painters.forEach { with(it) { prePaint() } }
 
-                viewport.translate(dx, dy)
-
-                mouse = it.x to it.y
-
-                repaint()
+                withTransform({
+                    translate(size.width * 0.5f, size.height * 0.5f)
+                    translate(viewport.x, viewport.y)
+                    scale(viewport.scale, viewport.scale)
+                }) {
+                    painters.forEach {
+                        with(it) { paint() }
+                    }
+                }
             }
         }
     }
-
-    override fun repaint() = graphicsContext2D.scope {
-        painters.forEach { it.apply { prePaint(width, height) } }
-
-        translate(width / 2, height / 2)
-        translate(viewport.x, viewport.y)
-        scale(viewport.scale, viewport.scale)
-
-        painters.forEach {
-            scope {
-                it.apply { paint(width, height) }
-            }
-        }
-    }
-
-    override fun isResizable(): Boolean = true
-}
-
-fun GraphicsContext.scope(block: GraphicsContext.() -> Unit) {
-    val stack = transform.clone()
-    block()
-    transform = stack
 }

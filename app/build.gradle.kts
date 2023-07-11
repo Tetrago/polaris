@@ -1,3 +1,4 @@
+val aurora_version: String by rootProject
 val hoplite_version: String by rootProject
 val koin_version: String by rootProject
 val koin_ksp_version: String by rootProject
@@ -16,9 +17,8 @@ buildscript {
 }
 
 plugins {
-    application
-    id("com.google.devtools.ksp") version "1.8.0-1.0.9"
-    id("org.openjfx.javafxplugin") version "0.0.14"
+    id("com.google.devtools.ksp")
+    id("org.jetbrains.compose")
 }
 
 apply(plugin = "io.objectbox")
@@ -26,23 +26,25 @@ apply(plugin = "io.objectbox")
 dependencies {
     implementation(project(":annotations"))
 
+    implementation(compose.desktop.currentOs)
     implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
     implementation("com.sksamuel.hoplite:hoplite-toml:$hoplite_version")
     implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.pushing-pixels:aurora-component:$aurora_version")
+    implementation("org.pushing-pixels:aurora-theming:$aurora_version")
+    implementation("org.pushing-pixels:aurora-window:$aurora_version")
     implementation("org.slf4j:slf4j-api:$slf4j_version")
 
     ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version")
 }
 
-application {
-    mainClass.set("tetrago.polaris.app.MainKt")
-}
-
-javafx {
-    modules("javafx.controls", "javafx.graphics", "javafx.fxml")
+compose.desktop {
+    application {
+        mainClass = "tetrago.polaris.app.MainKt"
+    }
 }
 
 tasks.register("copyModules") {
@@ -51,6 +53,6 @@ tasks.register("copyModules") {
     }
 }
 
-tasks.named("run") {
+tasks.named("assemble") {
     dependsOn(tasks.named("copyModules"))
 }

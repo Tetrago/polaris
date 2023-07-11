@@ -1,7 +1,7 @@
 package tetrago.polaris.app.ui.toolbar
 
-import javafx.scene.control.Button
+import org.pushingpixels.aurora.component.projection.CommandButtonProjection
 
 interface ToolbarProvider {
-    fun build(): Button
+    fun build(): CommandButtonProjection
 }

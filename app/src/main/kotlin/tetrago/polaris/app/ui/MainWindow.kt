@@ -1,50 +1,45 @@
 package tetrago.polaris.app.ui
 
-import javafx.application.Platform
-import javafx.event.EventHandler
-import javafx.scene.Scene
-import javafx.stage.Stage
-import org.koin.core.component.KoinComponent
-import org.koin.core.context.loadKoinModules
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.rememberWindowState
 import org.koin.dsl.module
-import org.slf4j.LoggerFactory
+import org.pushingpixels.aurora.theming.AuroraSkinDefinition
+import org.pushingpixels.aurora.window.AuroraApplicationScope
+import org.pushingpixels.aurora.window.AuroraWindow
+import tetrago.polaris.app.koin.getModuleKoin
 import tetrago.polaris.app.ui.canvas.CanvasProvider
 import tetrago.polaris.app.ui.canvas.MainCanvas
-import tetrago.polaris.app.ui.controller.MainController
 import tetrago.polaris.app.ui.toolbar.ToolbarProvider
 
-class MainWindow(stage: Stage) : KoinComponent {
-    companion object {
-        private val logger = LoggerFactory.getLogger(this::class.java)
-    }
+@Composable
+fun AuroraApplicationScope.MainWindow(skin: AuroraSkinDefinition) {
+    val toolbars: List<ToolbarProvider> = remember { getModuleKoin().getAll() }
+    val canvas = remember { MainCanvas() }
 
-    private val canvas: MainCanvas
+    getModuleKoin().loadModules(listOf(module {
+        single<CanvasProvider> { canvas }
+    }))
 
-    private val toolbars: List<ToolbarProvider> by lazy { getKoin().getAll() }
-    private val controller: MainController
+    AuroraWindow(
+        skin = skin,
+        state = rememberWindowState(width = 1280.dp, height = 720.dp),
+        onCloseRequest = ::exitApplication,
+        title = "Polaris",
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row {
+                toolbars.forEach { it.build().project() }
+            }
 
-    init {
-        stage.title = "Polaris"
-        stage.onCloseRequest = EventHandler { Platform.exit() }
-        stage.icons.add(MainApplication.icon)
-
-        Loader.loadFxml<MainController>("main.fxml").also {
-            stage.scene = Scene(it.first, 1280.0, 720.0)
-            controller = it.second
-        }
-
-        logger.debug("Found {} toolbar items", toolbars.size)
-        controller.toolbar.items.addAll(toolbars.map { it.build() })
-
-        canvas = MainCanvas().apply {
-            loadKoinModules(module {
-                single<CanvasProvider> { this@apply }
-            })
-
-            widthProperty().bind(controller.canvasPane.widthProperty())
-            heightProperty().bind(controller.canvasPane.heightProperty())
-
-            controller.canvasPane.children.add(this)
+            Row(modifier = Modifier.weight(1f)) {
+                canvas.paint()
+            }
         }
     }
 }

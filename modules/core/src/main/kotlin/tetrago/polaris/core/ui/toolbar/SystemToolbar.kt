@@ -6,8 +6,7 @@ import tetrago.polaris.app.ui.toolbar.ToolbarProvider
 import tetrago.polaris.core.ui.window.InfrastructureWindow
 
 @Single(binds = [ToolbarProvider::class])
-class SystemToolbar : IconToolbar(
+class SystemToolbar : IconToolbar<InfrastructureWindow>(
     "System",
-    InfrastructureWindow.TAG,
-    SystemToolbar::class.java.getResourceAsStream("system.png")!!
+    InfrastructureWindow::class
 )

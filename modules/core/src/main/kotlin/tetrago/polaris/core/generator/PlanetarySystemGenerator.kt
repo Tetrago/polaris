@@ -2,6 +2,7 @@ package tetrago.polaris.core.generator
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import tetrago.polaris.app.koin.ModuleKoinComponent
 import tetrago.polaris.core.data.Body
 import tetrago.polaris.core.data.BodyTypeRegistry
 import tetrago.polaris.core.data.PlanetarySystem
@@ -14,7 +15,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 
-class PlanetarySystemGenerator(private val random: Random) : PlanetarySystemProvider, KoinComponent {
+class PlanetarySystemGenerator(private val random: Random) : PlanetarySystemProvider, ModuleKoinComponent {
     private val generators: Generators by inject()
     private val bodyTypeRegistry: BodyTypeRegistry by inject()
 

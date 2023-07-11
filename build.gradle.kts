@@ -1,14 +1,16 @@
 val okio_version: String by project
 
 buildscript {
-    val objectBoxVersion by extra("3.6.0")
+    extra.set("objectBoxVersion", "3.6.0")
 }
 
 plugins {
     kotlin("jvm") version "1.8.0"
-    kotlin("kapt") version "1.8.0"
-    kotlin("plugin.serialization") version "1.8.0"
+    kotlin("kapt") version "1.8.0" apply false
+    kotlin("plugin.serialization") version "1.8.0" apply false
+    id("com.google.devtools.ksp") version "1.8.0-1.0.9" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
+    id("org.jetbrains.compose") version "1.4.1" apply false
 }
 
 allprojects {

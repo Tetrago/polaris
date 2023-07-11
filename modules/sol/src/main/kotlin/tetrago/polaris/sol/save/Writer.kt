@@ -1,9 +1,9 @@
 package tetrago.polaris.sol.save
 
-import javafx.scene.layout.Pane
-import org.koin.core.component.KoinComponent
+import androidx.compose.runtime.Composable
 import org.koin.core.component.get
 import org.koin.core.component.inject
+import tetrago.polaris.app.koin.ModuleKoinComponent
 import tetrago.polaris.app.save.SaveDataWriter
 import tetrago.polaris.core.data.Body
 import tetrago.polaris.core.data.BodyTypeRegistry
@@ -16,12 +16,13 @@ import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.random.Random
 
-class Writer : SaveDataWriter, KoinComponent {
+class Writer : SaveDataWriter, ModuleKoinComponent {
     private val bodyTypeRegistry: BodyTypeRegistry by inject()
 
     private lateinit var system: PlanetarySystem
 
-    override fun loadConfig(): Pane? = null
+    @Composable
+    override fun display() = Unit
 
     override fun initialize(random: Random) {
         system = PlanetarySystem(name = "Sol")

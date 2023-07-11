@@ -1,33 +1,36 @@
 package tetrago.polaris.app.ui.window
 
-import javafx.scene.Scene
-import javafx.stage.Stage
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import org.koin.core.annotation.Single
-import org.koin.mp.KoinPlatform.getKoin
+import org.koin.core.context.GlobalContext.get
+import org.pushingpixels.aurora.theming.AuroraSkinDefinition
+import org.pushingpixels.aurora.window.AuroraApplicationScope
+import kotlin.reflect.KClass
 
 @Single
 class WindowService {
-    private val windows: List<Window> = getKoin().getAll()
-    private val stages = windows.map {
-        val stage = Stage()
+    private val windows: List<Window> by lazy { get().getAll() }
 
-        stage.scene = Scene(it, 800.0, 600.0)
-        stage.title = it.title
+    inline fun <reified T : Window> open() = open(T::class)
+    inline fun <reified T : Window> close() = close(T::class)
 
-        it.tag to stage
-    }.toMap()
-
-    fun open(tag: String) {
-        stages[tag]?.let {
-            if(it.isShowing) {
-                it.toFront()
-            } else {
-                it.show()
-            }
-        }
+    fun <T : Window> open(cls: KClass<T>) {
+        windows.single { it::class == cls }.isOpen.value = true
     }
 
-    fun close(tag: String) {
-        stages[tag]?.hide()
+    fun <T : Window> close(cls: KClass<T>) {
+        windows.single { it::class == cls }.isOpen.value = false
+    }
+
+    @Composable
+    fun draw(scope: AuroraApplicationScope, skin: AuroraSkinDefinition) {
+        for(window in windows) {
+            val isOpen by remember { window.isOpen }
+            if(isOpen) {
+                window.draw(scope, skin)
+            }
+        }
     }
 }

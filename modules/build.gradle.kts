@@ -1,3 +1,4 @@
+val aurora_version: String by rootProject
 val koin_version: String by rootProject
 val koin_ksp_version: String by rootProject
 val slf4j_version: String by rootProject
@@ -15,26 +16,26 @@ buildscript {
 }
 
 plugins {
-    id("com.google.devtools.ksp") version "1.8.0-1.0.9"
-    id("org.openjfx.javafxplugin") version "0.0.14"
-}
-
-repositories {
-    mavenCentral()
+    id("com.google.devtools.ksp")
+    id("org.jetbrains.compose")
 }
 
 subprojects {
     apply(plugin = "com.google.devtools.ksp")
-    apply(plugin = "org.openjfx.javafxplugin")
     apply(plugin = "io.objectbox")
+    apply(plugin = "org.jetbrains.compose")
 
     dependencies {
         implementation(project(":annotations"))
         implementation(project(":app"))
 
+        implementation(compose.desktop.currentOs)
         implementation("io.insert-koin:koin-core:$koin_version")
         implementation("io.insert-koin:koin-annotations:$koin_ksp_version")
         implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+        implementation("org.pushing-pixels:aurora-component:$aurora_version")
+        implementation("org.pushing-pixels:aurora-theming:$aurora_version")
+        implementation("org.pushing-pixels:aurora-window:$aurora_version")
         implementation("org.slf4j:slf4j-api:$slf4j_version")
 
         ksp(project(":ksp"))
@@ -44,10 +45,6 @@ subprojects {
         testImplementation("io.insert-koin:koin-test-junit5:$koin_version")
         testImplementation("org.hamcrest:hamcrest:2.2")
         testImplementation("io.mockk:mockk:1.13.5")
-    }
-
-    javafx {
-        modules("javafx.controls", "javafx.graphics", "javafx.fxml")
     }
 
     tasks.register<Copy>("copyModule") {
